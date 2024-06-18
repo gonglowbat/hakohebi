@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { KeyboardControls } from '@react-three/drei'
+import { KeyboardControls, OrthographicCamera } from '@react-three/drei'
 import { Leva } from 'leva'
 import Scene from './Scene'
 
@@ -19,7 +19,7 @@ const App = () => {
                         fov: 75,
                         near: 0.1,
                         far: 100,
-                        position: [0, 0, 40],
+                        position: [0, 0, 30],
                     }}
                 >
                     <Scene />
