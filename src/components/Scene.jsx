@@ -1,48 +1,56 @@
 import { useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import { useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import { useControls } from 'leva'
 import Snake from './Snake'
 import Food from './Food'
+import useGame from '../stores/useGame'
 
 const Scene = () => {
-    const box = useRef()
     const snake = useRef()
     const food = useRef()
 
-    const boxControls = useControls({ scale: 1 })
+    const size = useMemo(() => ({ width: 40, height: 30 }), [])
+
+    const increaseSnakeTailLength = useGame((state) => state.increaseSnakeTailLength)
+    const isFoodEdible = useGame((state) => state.isFoodEdible)
+    const setIsFoodEdible = useGame((state) => state.setIsFoodEdible)
 
     useFrame(() => {
-        // console.log(snake);
-        // console.log(snake.current.position.x === food.current.position.x)
-        const isSamePositionX = snake.current.position.x === food.current.position.x
-        const isSamePositionY = snake.current.position.y === food.current.position.y
+        const isSamePositionX = snake.current.children[0].position.x === food.current.position.x
+        const isSamePositionY = snake.current.children[0].position.y === food.current.position.y
 
-        if (isSamePositionX && isSamePositionY) {
-            // console.log('eat')
-            snake.current.gong()
+        if (isSamePositionX && isSamePositionY && isFoodEdible) {
+            setIsFoodEdible(false)
+            increaseSnakeTailLength()
+            randomFoodPosition()
         }
     })
 
+    const randomFoodPosition = () => {
+        const x = Math.floor(Math.random() * size.width / 2)
+        const y = Math.floor(Math.random() * size.height / 2)
+
+        food.current.position.x = x
+        food.current.position.y = y
+
+        setIsFoodEdible(true)
+    }
+
     return (
         <>
-            {/* <Perf position="top-left" /> */}
+            <Perf position="top-left" />
 
-            {/* <OrbitControls makeDefault /> */}
-
-            {/* <mesh ref={box} scale={boxControls.scale}>
-                <boxGeometry />
-                <meshNormalMaterial />
-            </mesh> */}
+            <OrbitControls makeDefault />
 
             <mesh>
-                <planeGeometry args={[40, 30]} />
+                <planeGeometry args={[size.width, size.height]} />
                 <meshBasicMaterial />
             </mesh>
 
-            <Snake ref={snake} edge={{width: 40, height: 30}} />
-            <Food ref={food} position={[1, 5, 0.005]} />
+            <Snake ref={snake} edge={size} />
+            <Food ref={food} position={[0, 5, 0.005]} />
         </>
     )
 }

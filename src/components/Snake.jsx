@@ -1,7 +1,8 @@
 import * as THREE from 'three'
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { forwardRef, useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
+import useGame from '../stores/useGame'
 
 const snakeGeometry = new THREE.PlaneGeometry(1, 1)
 
@@ -31,14 +32,13 @@ const Tail = forwardRef(({ position = [0, 0, 0] }, ref) => {
 })
 
 const Snake = forwardRef((props, ref) => {
-    // const snakeHead = useRef()
-    const snakeHead = ref
+    const snakeHead = useRef()
     const snakeTails = useRef([])
-
     const [subscribeKeys] = useKeyboardControls()
 
-    const [tailLength, setTailLength] = useState(() => 4)
-    const [direction, setDirection] = useState(() => 'up')
+    const direction = useGame((state) => state.direction)
+    const setDirection = useGame((state) => state.setDirection)
+    const snakeTailLength = useGame((state) => state.snakeTailLength)
 
     let timer = 0
 
@@ -46,6 +46,7 @@ const Snake = forwardRef((props, ref) => {
         timer += delta
 
         if (timer >= 1 / 5) {
+        // if (timer >= 1) {
             const headPosition = {
                 x: snakeHead.current.position.x,
                 y: snakeHead.current.position.y,
@@ -109,60 +110,31 @@ const Snake = forwardRef((props, ref) => {
             unsubscribeLeft()
             unsubscribeRight()
         }
-    }, [])
-
-    useImperativeHandle(ref, () => {
-        return {
-            ...ref.current,
-            gong() {
-                console.log('asdf')
-            },
-        }
-    }, [])
+    })
 
     const tails = useMemo(() => {
-        return [...Array(tailLength).keys()].map((i) => {
+        return [...Array(snakeTailLength).keys()].map((i) => {
+            let position = [0, -(i + 1), 0.01]
+
+            if (i === snakeTailLength - 1 && snakeTails.current.length > 1) {
+                const lastPosition = snakeTails.current[snakeTails.current.length - 1].position
+                position = [lastPosition.x, lastPosition.y, 0.01]
+            }
+
             return (
-                <mesh
+                <Tail
                     key={i}
                     ref={(el) => snakeTails.current[i] = el}
-                    geometry={snakeGeometry}
-                    material={tailMaterial}
-                    position={[0, -(i + 1), 0.01]}
+                    position={position}
                 />
             )
         })
-    }, [snakeTails])
+    }, [snakeTailLength])
 
     return (
-        <group>
-            {/* <mesh
-                ref={snakeHead}
-                geometry={snakeGeometry}
-                material={headMaterial}
-                position={[0, 0, 0.01]}
-            /> */}
+        <group ref={ref}>
             <Head ref={snakeHead} position={[0, 0, 0.01]} />
-            {/* {tails()} */}
             {tails}
-            {/* <mesh
-                ref={(el) => snakeTails.current[0] = el}
-                geometry={snakeGeometry}
-                material={tailMaterial}
-                position={[0, -(0 + 1), 0.01]}
-            />
-            <mesh
-                ref={(el) => snakeTails.current[1] = el}
-                geometry={snakeGeometry}
-                material={tailMaterial}
-                position={[0, -(1 + 1), 0.01]}
-            />
-            <mesh
-                ref={(el) => snakeTails.current[2] = el}
-                geometry={snakeGeometry}
-                material={tailMaterial}
-                position={[0, -(2 + 1), 0.01]}
-            /> */}
         </group>
     )
 })

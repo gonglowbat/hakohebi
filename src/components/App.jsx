@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber'
-import { KeyboardControls, OrthographicCamera } from '@react-three/drei'
+import { KeyboardControls } from '@react-three/drei'
 import { Leva } from 'leva'
 import Scene from './Scene'
 
