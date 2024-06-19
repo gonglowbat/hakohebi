@@ -6,7 +6,7 @@ import Scene from './Scene'
 const App = () => {
     return (
         <>
-            {/* <Leva collapsed={false} /> */}
+            <Leva collapsed={false} />
 
             <KeyboardControls map={[
                 { name: 'up', keys: ['KeyW'] },
