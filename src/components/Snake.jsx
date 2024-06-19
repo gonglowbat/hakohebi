@@ -26,26 +26,32 @@ const Tail = forwardRef(({ position = [0, 0, 0], index = 0 }, ref) => {
     return (
         <mesh
             ref={ref}
-            position={position}
             geometry={snakeGeometry}
             material={index % 2 === 0 ? tailMaterial : tail2Material}
+            position={position}
         />
     )
 })
 
 const Snake = forwardRef((props, ref) => {
-    const snakeHead = useRef()
-    const snakeTails = useRef([])
+    const headRef = useRef()
+    const tailsRef = useRef([])
 
     const [subscribeKeys] = useKeyboardControls()
 
-    const { stop } = useControls({ stop: false })
+    const { stop, speed } = useControls({
+        stop: false,
+        speed: {
+            value: 1,
+            min: 1,
+            max: 10,
+            step: 1,
+        },
+    })
 
     const direction = useGame((state) => state.direction)
     const setDirection = useGame((state) => state.setDirection)
-    const snakeTailLength = useGame((state) => state.snakeTailLength)
-    const accquiredPosition = useGame((state) => state.accquiredPosition)
-    const setAccquiredPosition = useGame((state) => state.setAccquiredPosition)
+    const tails = useGame((state) => state.tails)
 
     useFrame((state) => {
         const { clock } = state
@@ -54,42 +60,43 @@ const Snake = forwardRef((props, ref) => {
             return
         }
 
-        if (clock.getElapsedTime() > 1) {
+        if (clock.getElapsedTime() > 1 / speed) {
             clock.start()
 
             const headPosition = {
-                x: snakeHead.current.position.x,
-                y: snakeHead.current.position.y,
+                x: headRef.current.position.x,
+                y: headRef.current.position.y,
             }
 
             if (direction === 'up') {
-                snakeHead.current.position.y += 1
+                headRef.current.position.y += 1
             }
 
             if (direction === 'down') {
-                snakeHead.current.position.y -= 1
+                headRef.current.position.y -= 1
             }
 
             if (direction === 'left') {
-                snakeHead.current.position.x -= 1
+                headRef.current.position.x -= 1
             }
 
             if (direction === 'right') {
-                snakeHead.current.position.x += 1
+                headRef.current.position.x += 1
             }
 
-            const newTailsPosition = snakeTails.current.map((tail) => ({
+            const newTailsPosition = tailsRef.current.map((tail) => ({
                 x: tail.position.x,
                 y: tail.position.y,
             }))
 
-            snakeTails.current[0].position.x = headPosition.x
-            snakeTails.current[0].position.y = headPosition.y
+            tailsRef.current[0].position.x = headPosition.x
+            tailsRef.current[0].position.y = headPosition.y
 
-            snakeTails.current.forEach((tail, index) => {
+            tailsRef.current.forEach((tail, index) => {
                 if (index > 0) {
                     tail.position.x = newTailsPosition[index - 1].x
                     tail.position.y = newTailsPosition[index - 1].y
+                    tail.position.z = 0.01
                 }
             })
         }
@@ -118,81 +125,18 @@ const Snake = forwardRef((props, ref) => {
         }
     })
 
-    const tailssss = () => {
-        const tails = [...Array(snakeTailLength).keys()].map((i) => {
-            // let position = [0, -(i + 1), 0.01]
-
-            // console.log(i, snakeTailLength, snakeTails.current.length, snakeTails.current)
-
-            // if (i === snakeTailLength - 1 && snakeTails.current.length > 1) {
-            //     const lastPosition = snakeTails.current[snakeTails.current.length - 1].position
-            //     position = [lastPosition.x, lastPosition.y, 0.01]
-
-            //     console.log(i, snakeTailLength, snakeTails.current.length, position)
-            // }
-
-            // const position = [Math.floor(Math.random() * 40 / 2), Math.floor(Math.random() * 30 / 2), 0.01]
-
-            const headPosition = {
-                x: snakeHead.current?.position.x || 0,
-                y: snakeHead.current?.position.y || 0,
-            }
-
-            const snakeTails = ref.current?.children.slice(1) || []
-
-            console.log(snakeTails)
-
-            const positionX = snakeTails[i]?.position.x || 0
-            const positionY = snakeTails[i]?.position.x || -(i + 1)
-
-            const position = [positionX, positionY, 0.01]
-            console.log(position, i)
-
-            return (
-                <Tail
-                    key={i}
-                    // ref={(el) => snakeTails.current[i] = el}
-                    position={position}
-                    index={i}
-                />
-            )
-        })
-
-        console.log('========')
-
-        return tails
-    }
-
-    const tails = useMemo(() => {
-        const tails = [...Array(snakeTailLength).keys()].map((i) => {
-            let position = [0, -(i + 1), 0.01]
-
-            if (i === snakeTailLength - 1 && snakeTails.current.length > 1) {
-                const lastPosition = snakeTails.current[snakeTails.current.length - 1].position
-                position = [lastPosition.x, lastPosition.y, 0.01]
-
-                console.log(i, snakeTailLength, snakeTails.current.length, position)
-            }
-
-            return (
-                <Tail
-                    key={i}
-                    ref={(el) => snakeTails.current[i] = el}
-                    position={position}
-                    index={i}
-                />
-            )
-        })
-
-        return tails
-    }, [snakeTailLength])
-
     return (
         <group ref={ref}>
-            {/* <Head ref={snakeHead} position={accquiredPosition[0].position.toArray()} /> */}
-            <Head ref={snakeHead} position={[0, 0, 0.01]} />
-            {tails}
-            {/* {tailssss()} */}
+            <Head ref={headRef} position={[0, 0, 0.01]} />
+
+            {tails.map((tailPosition, index) => (
+                <Tail
+                    key={index}
+                    ref={(el) => tailsRef.current[index] = el}
+                    position={tailPosition}
+                    index={index}
+                />
+            ))}
         </group>
     )
 })

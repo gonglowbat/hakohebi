@@ -2,7 +2,6 @@ import { useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { useMemo, useRef } from 'react'
 import { Perf } from 'r3f-perf'
-import { useControls } from 'leva'
 import Snake from './Snake'
 import Food from './Food'
 import useGame from '../stores/useGame'
@@ -13,9 +12,9 @@ const Scene = () => {
 
     const size = useMemo(() => ({ width: 40, height: 30 }), [])
 
-    const increaseSnakeTailLength = useGame((state) => state.increaseSnakeTailLength)
     const isFoodEdible = useGame((state) => state.isFoodEdible)
     const setIsFoodEdible = useGame((state) => state.setIsFoodEdible)
+    const setTails = useGame((state) => state.setTails)
 
     useFrame(() => {
         const isSamePositionX = snake.current.children[0].position.x === food.current.position.x
@@ -23,7 +22,7 @@ const Scene = () => {
 
         if (isSamePositionX && isSamePositionY && isFoodEdible) {
             setIsFoodEdible(false)
-            increaseSnakeTailLength()
+            setTails([0, 0, 0])
             randomFoodPosition()
         }
     })
