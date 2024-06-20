@@ -5,7 +5,7 @@ import { useKeyboardControls } from '@react-three/drei'
 import { useControls } from 'leva'
 import useGame from '../stores/useGame'
 
-const snakeGeometry = new THREE.PlaneGeometry(1, 1)
+const snakeGeometry = new THREE.BoxGeometry(1, 1, 1)
 
 const headMaterial = new THREE.MeshNormalMaterial()
 const tailMaterial = new THREE.MeshBasicMaterial({ color: 'salmon' })
@@ -65,15 +65,15 @@ const Snake = forwardRef((props, ref) => {
 
             const headPosition = {
                 x: headRef.current.position.x,
-                y: headRef.current.position.y,
+                z: headRef.current.position.z,
             }
 
             if (direction === 'up') {
-                headRef.current.position.y += 1
+                headRef.current.position.z -= 1
             }
 
             if (direction === 'down') {
-                headRef.current.position.y -= 1
+                headRef.current.position.z += 1
             }
 
             if (direction === 'left') {
@@ -86,17 +86,20 @@ const Snake = forwardRef((props, ref) => {
 
             const newTailsPosition = tailsRef.current.map((tail) => ({
                 x: tail.position.x,
-                y: tail.position.y,
+                z: tail.position.z,
             }))
 
             tailsRef.current[0].position.x = headPosition.x
-            tailsRef.current[0].position.y = headPosition.y
+            tailsRef.current[0].position.z = headPosition.z
+            tails[0].x = headPosition.x
+            tails[0].z = headPosition.z
 
             tailsRef.current.forEach((tail, index) => {
                 if (index > 0) {
                     tail.position.x = newTailsPosition[index - 1].x
-                    tail.position.y = newTailsPosition[index - 1].y
-                    tail.position.z = 0.01
+                    tail.position.z = newTailsPosition[index - 1].z
+                    tails[index].x = newTailsPosition[index - 1].x
+                    tails[index].z = newTailsPosition[index - 1].z
                 }
             })
         }

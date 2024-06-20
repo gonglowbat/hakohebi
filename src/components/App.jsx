@@ -15,12 +15,15 @@ const App = () => {
                 { name: 'right', keys: ['KeyD'] },
             ]}>
                 <Canvas
-                    camera={{
-                        fov: 75,
-                        near: 0.1,
-                        far: 100,
-                        position: [0, 0, 30],
-                    }}
+                    // camera={{
+                    //     fov: 75,
+                    //     near: 0.1,
+                    //     far: 100,
+                    //     position: [0, 0, 30],
+                    // }}
+                    // camera={{ position: [30, 32, 32], fov: 25 }}
+                    orthographic
+                    camera={{ zoom: 40, position: [30, 32, 32] }}
                 >
                     <Scene />
                 </Canvas>
