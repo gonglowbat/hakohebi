@@ -1,20 +1,17 @@
 import * as THREE from 'three'
-import { forwardRef, useEffect, useMemo, useRef } from 'react'
+import { forwardRef, useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
 import { useControls } from 'leva'
 import { colors } from '../enums/colors'
 import useGame from '../stores/useGame'
 
-const headGeometry = new THREE.BoxGeometry(1, 1, 1)
 const tailGeometry = new THREE.BoxGeometry(1, 1, 1)
 
-const headMaterial = new THREE.MeshStandardMaterial({ color: colors.red })
-
-const tailMaterial = new THREE.MeshStandardMaterial({ color: colors.yellow })
-const tail2Material = new THREE.MeshStandardMaterial({ color: colors.green })
-const tail3Material = new THREE.MeshStandardMaterial({ color: colors.blue })
-const tail4Material = new THREE.MeshStandardMaterial({ color: colors.red })
+const tailMaterial = new THREE.MeshStandardMaterial({ color: colors.red })
+const tail2Material = new THREE.MeshStandardMaterial({ color: colors.yellow })
+const tail3Material = new THREE.MeshStandardMaterial({ color: colors.green })
+const tail4Material = new THREE.MeshStandardMaterial({ color: colors.blue })
 
 const tailMaterials = [
     tailMaterial,
@@ -25,12 +22,16 @@ const tailMaterials = [
 
 const Head = forwardRef(({ position = [0, 0, 0] }, ref) => {
     return (
-        <mesh
-            ref={ref}
-            geometry={headGeometry}
-            material={headMaterial}
-            position={position}
-        />
+        <group ref={ref} position={position}>
+            <mesh>
+                <boxGeometry />
+                <meshStandardMaterial color={colors.bright} />
+            </mesh>
+            <mesh position-y={1}>
+                <coneGeometry args={[0.5, 1, 4]} />
+                <meshStandardMaterial color={colors.bright} />
+            </mesh>
+        </group>
     )
 })
 
@@ -144,7 +145,7 @@ const Snake = forwardRef((props, ref) => {
 
     return (
         <group ref={ref}>
-            <Head ref={headRef} position={[0, 0, 0.01]} />
+            <Head ref={headRef} position={[0, 0, 0]} />
 
             {tails.map((tailPosition, index) => (
                 <Tail
