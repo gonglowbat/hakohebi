@@ -3,31 +3,45 @@ import { forwardRef, useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
 import { useControls } from 'leva'
+import { colors } from '../enums/colors'
 import useGame from '../stores/useGame'
 
-const snakeGeometry = new THREE.BoxGeometry(1, 1, 1)
+const headGeometry = new THREE.BoxGeometry(1, 1, 1)
+const tailGeometry = new THREE.BoxGeometry(1, 1, 1)
 
-const headMaterial = new THREE.MeshNormalMaterial()
-const tailMaterial = new THREE.MeshBasicMaterial({ color: 'salmon' })
-const tail2Material = new THREE.MeshBasicMaterial({ color: 'green' })
+const headMaterial = new THREE.MeshStandardMaterial({ color: colors.red })
+
+const tailMaterial = new THREE.MeshStandardMaterial({ color: colors.yellow })
+const tail2Material = new THREE.MeshStandardMaterial({ color: colors.green })
+const tail3Material = new THREE.MeshStandardMaterial({ color: colors.blue })
+const tail4Material = new THREE.MeshStandardMaterial({ color: colors.red })
+
+const tailMaterials = [
+    tailMaterial,
+    tail2Material,
+    tail3Material,
+    tail4Material,
+]
 
 const Head = forwardRef(({ position = [0, 0, 0] }, ref) => {
     return (
         <mesh
             ref={ref}
-            position={position}
-            geometry={snakeGeometry}
+            geometry={headGeometry}
             material={headMaterial}
+            position={position}
         />
     )
 })
 
 const Tail = forwardRef(({ position = [0, 0, 0], index = 0 }, ref) => {
+    const material = tailMaterials[index % tailMaterials.length]
+
     return (
         <mesh
             ref={ref}
-            geometry={snakeGeometry}
-            material={index % 2 === 0 ? tailMaterial : tail2Material}
+            geometry={tailGeometry}
+            material={material}
             position={position}
         />
     )
@@ -42,7 +56,7 @@ const Snake = forwardRef((props, ref) => {
     const { stop, speed } = useControls({
         stop: false,
         speed: {
-            value: 1,
+            value: 5,
             min: 1,
             max: 10,
             step: 1,

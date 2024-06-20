@@ -1,9 +1,9 @@
-import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
-import { GizmoHelper, GizmoViewport, Grid, OrbitControls } from '@react-three/drei'
+import { Environment, GizmoHelper, GizmoViewport, Grid, OrbitControls } from '@react-three/drei'
 import { useMemo, useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import { useControls } from 'leva'
+import { configs } from '../enums/configs'
 import Snake from './Snake'
 import Food from './Food'
 import useGame from '../stores/useGame'
@@ -12,14 +12,14 @@ const Scene = () => {
     const snake = useRef()
     const food = useRef()
 
-    const size = useMemo(() => ({ width: 40, height: 30 }), [])
+    const size = useMemo(() => ({ width: configs.width, height: configs.height }), [])
 
     const isFoodEdible = useGame((state) => state.isFoodEdible)
     const setIsFoodEdible = useGame((state) => state.setIsFoodEdible)
     const setTails = useGame((state) => state.setTails)
     const tails = useGame((state) => state.tails)
 
-    useFrame(() => {
+    useFrame((state) => {
         const isSamePositionX = Math.floor(snake.current.children[0].position.x) === Math.floor(food.current.position.x)
         const isSamePositionZ = Math.floor(snake.current.children[0].position.z) === Math.floor(food.current.position.z)
 
@@ -62,16 +62,12 @@ const Scene = () => {
 
             <OrbitControls makeDefault />
 
-            <axesHelper args={[20]} />
+            <Environment preset="city" />
 
             <GizmoHelper>
                 <GizmoViewport labelColor="white" />
             </GizmoHelper>
 
-            {/* <mesh>
-                <planeGeometry args={[size.width, size.height]} />
-                <meshBasicMaterial />
-            </mesh> */}
             <Grid position={[-0.5, -0.51, -0.5]} args={gridSize} {...gridConfig} />
 
             <Snake ref={snake} edge={size} />
