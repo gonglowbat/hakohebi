@@ -1,6 +1,6 @@
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import { Environment, GizmoHelper, GizmoViewport, Grid, OrbitControls } from '@react-three/drei'
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import { useControls } from 'leva'
 import { configs } from '../enums/configs'
@@ -9,6 +9,12 @@ import Food from './Food'
 import useGame from '../stores/useGame'
 
 const Scene = () => {
+    const three = useThree()
+
+    useEffect(() => {
+        window.camera = three.camera
+    })
+
     const snake = useRef()
     const food = useRef()
 
@@ -43,15 +49,15 @@ const Scene = () => {
     }
 
     const { gridSize, ...gridConfig } = useControls({
-        gridSize: [40, 40],
+        gridSize: [configs.width, configs.height],
         cellSize: { value: 1, min: 0, max: 10, step: 0.1 },
         cellThickness: { value: 0.6, min: 0, max: 5, step: 0.1 },
         cellColor: '#6f6f6f',
         sectionSize: { value: 4, min: 0, max: 10, step: 0.1 },
         sectionThickness: { value: 1, min: 0, max: 5, step: 0.1 },
         sectionColor: '#9d4b4b',
-        fadeDistance: { value: 80, min: 0, max: 100, step: 1 },
-        fadeStrength: { value: 1, min: 0, max: 1, step: 0.1 },
+        fadeDistance: { value: 100, min: 0, max: 100, step: 1 },
+        fadeStrength: { value: 0, min: 0, max: 1, step: 0.1 },
         followCamera: false,
         infiniteGrid: false,
     })

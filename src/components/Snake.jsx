@@ -57,7 +57,7 @@ const Snake = forwardRef((props, ref) => {
     const { stop, speed } = useControls({
         stop: false,
         speed: {
-            value: 5,
+            value: 10,
             min: 1,
             max: 10,
             step: 1,

@@ -22,8 +22,9 @@ const App = () => {
                     //     position: [0, 0, 30],
                     // }}
                     // camera={{ position: [30, 32, 32], fov: 25 }}
-                    orthographic
-                    camera={{ zoom: 40, position: [30, 32, 32] }}
+                    camera={{ position: [13, 33, 36], fov: 25 }}
+                    // orthographic
+                    // camera={{ zoom: 40, position: [30, 32, 32] }}
                 >
                     <Scene />
                 </Canvas>
