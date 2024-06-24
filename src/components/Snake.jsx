@@ -54,19 +54,14 @@ const Snake = forwardRef((props, ref) => {
 
     const [subscribeKeys] = useKeyboardControls()
 
-    const { stop, speed } = useControls({
-        stop: false,
-        speed: {
-            value: 10,
-            min: 1,
-            max: 10,
-            step: 1,
-        },
-    })
-
     const direction = useGame((state) => state.direction)
     const setDirection = useGame((state) => state.setDirection)
+    const speed = useGame((state) => state.speed)
     const tails = useGame((state) => state.tails)
+
+    const { stop } = useControls({
+        stop: false,
+    })
 
     useFrame((state) => {
         const { clock } = state
