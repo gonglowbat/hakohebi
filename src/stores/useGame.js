@@ -1,25 +1,35 @@
 import * as THREE from 'three'
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
+import { configs } from '../enums/configs'
 
 const useGame = create(subscribeWithSelector((set) => ({
-    direction: 'up',
+    direction: configs.direction,
     setDirection: (direction) => set({ direction }),
 
-    speed: 10,
+    speed: configs.normalSpeed,
     setSpeed: (speed) => set({ speed }),
+
+    cameraPosition: configs.camera.normalPosition,
+    setCameraPosition: (cameraPosition) => set({ cameraPosition }),
 
     isFoodEdible: true,
     setIsFoodEdible: (isFoodEdible) => set({ isFoodEdible }),
 
-    isBooterUsable: false,
+    isBoosterUsable: false,
     setIsBoosterUsable: (isBoosterUsable) => set({ isBoosterUsable }),
 
     isBoosterInUse: false,
     setIsBoosterInUse: (isBoosterInUse) => set({ isBoosterInUse }),
 
+    isBoozeUsable: false,
+    setIsBoozeUsable: (isBoozeUsable) => set({ isBoozeUsable }),
+
+    isBoozeInUse: false,
+    setIsBoozeInUse: (isBoozeInUse) => set({ isBoozeInUse }),
+
     tails: [new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 2)],
-    setTails: (tail) => set((state) => ({ tails: [...state.tails, tail] }))
+    setTails: (tail) => set((state) => ({ tails: [...state.tails, tail] })),
 })))
 
 export default useGame
