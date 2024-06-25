@@ -1,8 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber'
-import { Environment, GizmoHelper, GizmoViewport, Grid, OrbitControls } from '@react-three/drei'
+import { Environment, GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei'
 import { useEffect, useMemo, useRef } from 'react'
 import { Perf } from 'r3f-perf'
-import { useControls } from 'leva'
 import { configs } from '../enums/configs'
 import Snake from './Snake'
 import Food from './Food'
@@ -10,6 +9,7 @@ import Booster from './Booster'
 import Booze from './Booze'
 import useGame from '../stores/useGame'
 import * as array from '../utils/array'
+import Grid from './Grid'
 
 const Scene = () => {
     const snakeRef = useRef()
@@ -162,20 +162,6 @@ const Scene = () => {
         setIsBoozeUsable(true)
     }
 
-    const { gridSize, ...gridConfig } = useControls({
-        gridSize: [configs.width, configs.height],
-        cellSize: { value: 1, min: 0, max: 10, step: 0.1 },
-        cellThickness: { value: 0.6, min: 0, max: 5, step: 0.1 },
-        cellColor: '#6f6f6f',
-        sectionSize: { value: 4, min: 0, max: 10, step: 0.1 },
-        sectionThickness: { value: 1, min: 0, max: 5, step: 0.1 },
-        sectionColor: '#9d4b4b',
-        fadeDistance: { value: 100, min: 0, max: 100, step: 1 },
-        fadeStrength: { value: 0, min: 0, max: 1, step: 0.1 },
-        followCamera: false,
-        infiniteGrid: false,
-    })
-
     return (
         <>
             <Perf position="top-left" />
@@ -190,8 +176,7 @@ const Scene = () => {
                 <GizmoViewport labelColor="white" />
             </GizmoHelper>
 
-            <Grid position={[-0.5, -0.51, -0.5]} args={gridSize} {...gridConfig} />
-            <Grid position={[-0.5, -0.51, -0.5]} rotation-z={Math.PI} args={gridSize} {...gridConfig} />
+            <Grid />
 
             <Snake ref={snakeRef} edge={size} />
             <Food ref={foodRef} position={[100, 100, 100]} />
