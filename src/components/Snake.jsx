@@ -5,6 +5,7 @@ import { useKeyboardControls } from '@react-three/drei'
 import { useControls } from 'leva'
 import { colors } from '../enums/colors'
 import useGame from '../stores/useGame'
+import { configs } from '../enums/configs'
 
 const tailGeometry = new THREE.BoxGeometry(1, 1, 1)
 
@@ -94,6 +95,8 @@ const Snake = forwardRef((props, ref) => {
                 headRef.current.position.x += 1
             }
 
+            passThroughWall()
+
             const newTailsPosition = tailsRef.current.map((tail) => ({
                 x: tail.position.x,
                 z: tail.position.z,
@@ -114,6 +117,28 @@ const Snake = forwardRef((props, ref) => {
             })
         }
     })
+
+    const passThroughWall = () => {
+        if (headRef.current.position.x > (configs.width / 2) - 1) {
+            headRef.current.position.x = -configs.width / 2
+            return
+        }
+
+        if (headRef.current.position.x < (-configs.width / 2)) {
+            headRef.current.position.x = (configs.width / 2) - 1
+            return
+        }
+
+        if (headRef.current.position.z > (configs.height / 2) - 1) {
+            headRef.current.position.z = -configs.height / 2
+            return
+        }
+
+        if (headRef.current.position.z < (-configs.height / 2)) {
+            headRef.current.position.z = (configs.height / 2) - 1
+            return
+        }
+    }
 
     const subscribeKey = (goto) => {
         return subscribeKeys(
