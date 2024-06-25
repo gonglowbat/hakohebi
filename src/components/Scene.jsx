@@ -9,12 +9,13 @@ import Food from './Food'
 import Booster from './Booster'
 import Booze from './Booze'
 import useGame from '../stores/useGame'
+import * as array from '../utils/array'
 
 const Scene = () => {
-    const snake = useRef()
-    const food = useRef()
-    const booster = useRef()
-    const booze = useRef()
+    const snakeRef = useRef()
+    const foodRef = useRef()
+    const boosterRef = useRef()
+    const boozeRef = useRef()
 
     const size = useMemo(() => ({ width: configs.width, height: configs.height }), [])
 
@@ -44,29 +45,29 @@ const Scene = () => {
     }, [])
 
     useFrame((state) => {
-        const isSamePositionAsFoodX = Math.floor(snake.current.children[0].position.x) === Math.floor(food.current.position.x)
-        const isSamePositionAsFoodZ = Math.floor(snake.current.children[0].position.z) === Math.floor(food.current.position.z)
+        const isSamePositionAsFoodX = Math.floor(snakeRef.current.children[0].position.x) === Math.floor(foodRef.current.position.x)
+        const isSamePositionAsFoodZ = Math.floor(snakeRef.current.children[0].position.z) === Math.floor(foodRef.current.position.z)
 
         if (isSamePositionAsFoodX && isSamePositionAsFoodZ && isFoodEdible) {
             const lastTailPosition = tails[tails.length - 1]
             setTails(lastTailPosition.clone())
 
             setIsFoodEdible(false)
-            food.current.position.set(100, 100, 100)
+            foodRef.current.position.set(100, 100, 100)
             randomItems()
 
             return
         }
 
-        const isSamePositionAsBoosterX = Math.floor(snake.current.children[0].position.x) === Math.floor(booster.current.position.x)
-        const isSamePositionAsBoosterZ = Math.floor(snake.current.children[0].position.z) === Math.floor(booster.current.position.z)
+        const isSamePositionAsBoosterX = Math.floor(snakeRef.current.children[0].position.x) === Math.floor(boosterRef.current.position.x)
+        const isSamePositionAsBoosterZ = Math.floor(snakeRef.current.children[0].position.z) === Math.floor(boosterRef.current.position.z)
 
         if (isSamePositionAsBoosterX && isSamePositionAsBoosterZ && isBoosterUsable) {
             setSpeed(configs.superSpeed)
 
             setIsBoosterUsable(false)
             setIsBoosterInUse(true)
-            booster.current.position.set(100, 100, 100)
+            boosterRef.current.position.set(100, 100, 100)
             randomItems()
 
             const boosterTimeout = setTimeout(() => {
@@ -78,8 +79,8 @@ const Scene = () => {
             return
         }
 
-        const isSamePositionAsBoozeX = Math.floor(snake.current.children[0].position.x) === Math.floor(booze.current.position.x)
-        const isSamePositionAsBoozeZ = Math.floor(snake.current.children[0].position.z) === Math.floor(booze.current.position.z)
+        const isSamePositionAsBoozeX = Math.floor(snakeRef.current.children[0].position.x) === Math.floor(boozeRef.current.position.x)
+        const isSamePositionAsBoozeZ = Math.floor(snakeRef.current.children[0].position.z) === Math.floor(boozeRef.current.position.z)
 
         if (isSamePositionAsBoozeX && isSamePositionAsBoozeZ && isBoozeUsable) {
             setCameraPosition(configs.camera.invertPosition)
@@ -87,7 +88,7 @@ const Scene = () => {
 
             setIsBoozeUsable(false)
             setIsBoozeInUse(true)
-            booze.current.position.set(100, 100, 100)
+            boozeRef.current.position.set(100, 100, 100)
             randomItems()
 
             const boozeTimeout = setTimeout(() => {
@@ -131,27 +132,33 @@ const Scene = () => {
         return randomBoosterPosition()
     }
 
-    const randomFoodPosition = () => {
-        const x = Math.floor(Math.random() * size.width / 2)
-        const z = Math.floor(Math.random() * size.height / 2)
+    const getAvailablePositions = (dimension) => {
+        const occupiedPositions = snakeRef.current.children.map((child) => Math.floor(child.position[dimension]))
 
-        food.current.position.set(x, 0, z)
+        return array.unique(occupiedPositions, configs.gridRange[dimension])
+    }
+
+    const randomFoodPosition = () => {
+        const x = array.random(getAvailablePositions('x'))
+        const z = array.random(getAvailablePositions('z'))
+
+        foodRef.current.position.set(x, 0, z)
         setIsFoodEdible(true)
     }
 
     const randomBoosterPosition = () => {
-        const x = Math.floor(Math.random() * size.width / 2)
-        const z = Math.floor(Math.random() * size.height / 2)
+        const x = array.random(getAvailablePositions('x'))
+        const z = array.random(getAvailablePositions('z'))
 
-        booster.current.position.set(x, 0, z)
+        boosterRef.current.position.set(x, 0, z)
         setIsBoosterUsable(true)
     }
 
     const randomBoozePosition = () => {
-        const x = Math.floor(Math.random() * size.width / 2)
-        const z = Math.floor(Math.random() * size.height / 2)
+        const x = array.random(getAvailablePositions('x'))
+        const z = array.random(getAvailablePositions('z'))
 
-        booze.current.position.set(x, 0, z)
+        boozeRef.current.position.set(x, 0, z)
         setIsBoozeUsable(true)
     }
 
@@ -175,6 +182,8 @@ const Scene = () => {
 
             <OrbitControls makeDefault />
 
+            <axesHelper args={[10]} />
+
             <Environment preset="city" />
 
             <GizmoHelper>
@@ -184,10 +193,10 @@ const Scene = () => {
             <Grid position={[-0.5, -0.51, -0.5]} args={gridSize} {...gridConfig} />
             <Grid position={[-0.5, -0.51, -0.5]} rotation-z={Math.PI} args={gridSize} {...gridConfig} />
 
-            <Snake ref={snake} edge={size} />
-            <Food ref={food} position={[100, 100, 100]} />
-            <Booster ref={booster} position={[100, 100, 100]} />
-            <Booze ref={booze} position={[100, 100, 100]} />
+            <Snake ref={snakeRef} edge={size} />
+            <Food ref={foodRef} position={[100, 100, 100]} />
+            <Booster ref={boosterRef} position={[100, 100, 100]} />
+            <Booze ref={boozeRef} position={[100, 100, 100]} />
         </>
     )
 }

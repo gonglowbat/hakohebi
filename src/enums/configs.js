@@ -1,6 +1,16 @@
+import { range } from "../utils/array"
+
+const width = 24
+const height = 16
+
 export const configs = {
-    width: 24,
-    height: 16,
+    width,
+    height,
+
+    gridRange: {
+        x: range(-width / 2, width / 2),
+        z: range(-height / 2, height / 2),
+    },
 
     direction: 'up',
 
