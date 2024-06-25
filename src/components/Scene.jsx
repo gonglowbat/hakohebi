@@ -38,9 +38,13 @@ const Scene = () => {
     const setTails = useGame((state) => state.setTails)
     const tails = useGame((state) => state.tails)
 
+    const isDebug = useGame((state) => state.isDebug)
+
     const { camera } = useThree()
 
     useEffect(() => {
+        // window.camera = camera
+        // camera.lookAt(0, 0, 0)
         randomItems()
     }, [])
 
@@ -85,6 +89,7 @@ const Scene = () => {
         if (isSamePositionAsBoozeX && isSamePositionAsBoozeZ && isBoozeUsable) {
             setCameraPosition(configs.camera.invertPosition)
             camera.position.set(...configs.camera.invertPosition)
+            camera.lookAt(0, 0, 0)
 
             setIsBoozeUsable(false)
             setIsBoozeInUse(true)
@@ -95,6 +100,7 @@ const Scene = () => {
                 setIsBoozeInUse(false)
                 setCameraPosition(configs.camera.normalPosition)
                 camera.position.set(...configs.camera.normalPosition)
+                camera.lookAt(0, 0, 0)
                 clearTimeout(boozeTimeout)
             }, 3000)
 
@@ -164,18 +170,19 @@ const Scene = () => {
 
     return (
         <>
-            <Perf position="top-left" />
+            {isDebug && (
+                <>
+                    <Perf position="top-left" />
+                    <OrbitControls makeDefault />
+                    <axesHelper args={[10]} />
 
-            <OrbitControls makeDefault />
-
-            <axesHelper args={[10]} />
+                    <GizmoHelper>
+                        <GizmoViewport />
+                    </GizmoHelper>
+                </>
+            )}
 
             <Environment preset="city" />
-
-            <GizmoHelper>
-                <GizmoViewport labelColor="white" />
-            </GizmoHelper>
-
             <Grid />
 
             <Snake ref={snakeRef} edge={size} />

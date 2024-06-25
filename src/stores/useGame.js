@@ -30,6 +30,10 @@ const useGame = create(subscribeWithSelector((set) => ({
 
     tails: [new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 2)],
     setTails: (tail) => set((state) => ({ tails: [...state.tails, tail] })),
+
+    // isDebug: window.location.hash === '#debug',
+    isDebug: true,
+    setIsDebug: (isDebug) => set(() => ({ isDebug })),
 })))
 
 export default useGame
