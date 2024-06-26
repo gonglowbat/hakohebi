@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Environment, Float, Grid, Text } from '@react-three/drei'
 import { configs } from '../enums/configs'
+import useGame from '../stores/useGame'
 
 const Level = () => {
     const position = useMemo(() => [-0.5, -0.51, -0.5], [])
@@ -18,6 +19,8 @@ const Level = () => {
         infiniteGrid: false,
     }), [])
 
+    const tails = useGame((state) => state.tails)
+
     return (
         <>
             <Environment preset="city" />
@@ -30,6 +33,19 @@ const Level = () => {
                     scale={2}
                 >
                     UP
+                    <meshBasicMaterial toneMapped={false} />
+                </Text>
+            </Float>
+
+            <Float floatIntensity={1} rotationIntensity={0.25} speed={1}>
+                <Text
+                    font="/fonts/bebas-neue-regular.ttf"
+                    textAlign="center"
+                    position={[(-configs.width / 2) - 2, 0.5, 0.5]}
+                    rotation-y={Math.PI / 2}
+                    scale={2}
+                >
+                    Score: {tails.length - 2}
                     <meshBasicMaterial toneMapped={false} />
                 </Text>
             </Float>
