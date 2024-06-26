@@ -98,10 +98,6 @@ const Snake = forwardRef((props, ref) => {
 
             passThroughWall()
 
-            if (isSnakeHitItself()) {
-                end()
-            }
-
             const newTailsPosition = tailsRef.current.map((tail) => ({
                 x: tail.position.x,
                 z: tail.position.z,
@@ -120,6 +116,10 @@ const Snake = forwardRef((props, ref) => {
                     tails[index].z = newTailsPosition[index - 1].z
                 }
             })
+
+            if (isSnakeHitItself()) {
+                end()
+            }
         }
     })
 
@@ -146,13 +146,13 @@ const Snake = forwardRef((props, ref) => {
     }
 
     const isSnakeHitItself = () => {
-        const occupiedPositionsX = tailsRef.current.map((tail) => Math.floor(tail.position.x))
         const headPositionX = Math.floor(headRef.current.position.x)
-
-        const occupiedPositionsZ = tailsRef.current.map((tail) => Math.floor(tail.position.z))
         const headPositionZ = Math.floor(headRef.current.position.z)
 
-        return occupiedPositionsX.includes(headPositionX) && occupiedPositionsZ.includes(headPositionZ)
+        return tailsRef.current.some((tail) => {
+            return Math.floor(tail.position.x) === headPositionX
+                && Math.floor(tail.position.z) === headPositionZ
+        })
     }
 
     const subscribeKey = (goto, opposite) => {
