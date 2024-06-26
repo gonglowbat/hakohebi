@@ -3,7 +3,6 @@ import { devtools, subscribeWithSelector } from 'zustand/middleware'
 import { configs } from '../enums/configs'
 import { phase } from '../enums/phase'
 
-// const useGame = create(subscribeWithSelector((set) => ({
 const useGame = create(devtools(subscribeWithSelector((set) => ({
     direction: configs.direction,
     setDirection: (direction) => set({ direction }),
@@ -36,43 +35,42 @@ const useGame = create(devtools(subscribeWithSelector((set) => ({
     isDebug: window.location.hash === '#debug',
     setIsDebug: (isDebug) => set(() => ({ isDebug })),
 
-    phase: phase.ready,
+    phase: phase.READY,
     start: () => set((state) => {
-        if (state.phase === phase.ready || state.phase === phase.restarting) {
-            return { phase: phase.playing }
+        if (state.phase === phase.READY || state.phase === phase.RESTARTING) {
+            return { phase: phase.PLAYING }
         }
 
         return {}
     }),
     restart: () => set((state) => {
-        if (state.phase === phase.ended) {
-            return { phase: phase.restarting }
+        if (state.phase === phase.ENDED) {
+            return { phase: phase.RESTARTING }
         }
 
         return {}
     }),
     pause: () => set((state) => {
-        if (state.phase === phase.playing) {
-            return { phase: phase.pause }
+        if (state.phase === phase.PLAYING) {
+            return { phase: phase.PAUSE }
         }
 
         return {}
     }),
     resume: () => set((state) => {
-        if (state.phase === phase.pause) {
-            return { phase: phase.playing }
+        if (state.phase === phase.PAUSE) {
+            return { phase: phase.PLAYING }
         }
 
         return {}
     }),
     end: () => set((state) => {
-        if (state.phase === phase.playing) {
-            return { phase: phase.ended }
+        if (state.phase === phase.PLAYING) {
+            return { phase: phase.ENDED }
         }
 
         return {}
     }),
 }))))
-// })))
 
 export default useGame

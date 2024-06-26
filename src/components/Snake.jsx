@@ -70,7 +70,7 @@ const Snake = forwardRef((props, ref) => {
     useFrame((state) => {
         const { clock } = state
 
-        if (phase !== phaseEnum.playing) {
+        if (phase !== phaseEnum.PLAYING) {
             return
         }
 
@@ -180,7 +180,7 @@ const Snake = forwardRef((props, ref) => {
             (state) => state.pause,
             (value) => {
                 if (value) {
-                    return phase === phaseEnum.playing ? pause() : resume()
+                    return phase === phaseEnum.PLAYING ? pause() : resume()
                 }
             }
         )
@@ -198,7 +198,7 @@ const Snake = forwardRef((props, ref) => {
         const unsubscribeRestart = useGame.subscribe((
             state) => state.phase,
             (value) => {
-                if (value === phaseEnum.restarting) {
+                if (value === phaseEnum.RESTARTING) {
                     headRef.current.position.set(0, 0, 0)
                     resetTails()
                     tailsRef.current = []

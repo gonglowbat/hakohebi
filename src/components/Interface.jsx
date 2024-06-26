@@ -8,7 +8,7 @@ const Interface = () => {
 
     return (
         <div className="interface">
-            {phase === phaseEnum.ready && (
+            {phase === phaseEnum.READY && (
                 <>
                     <div className="info" onClick={ start }>
                         <p className="title">Start!</p>
@@ -16,7 +16,7 @@ const Interface = () => {
                 </>
             )}
 
-            {phase === phaseEnum.ended && (
+            {phase === phaseEnum.ENDED && (
                 <>
                     <div className="info" onClick={ restart }>
                         <p className="title">Oops!</p>
