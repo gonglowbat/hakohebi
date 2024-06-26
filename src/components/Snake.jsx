@@ -2,17 +2,17 @@ import * as THREE from 'three'
 import { forwardRef, useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
-import { colors } from '../enums/colors'
+import { color } from '../enums/color'
 import { configs } from '../enums/configs'
 import { phase as phaseEnum } from '../enums/phase'
 import useGame from '../stores/useGame'
 
 const tailGeometry = new THREE.BoxGeometry(1, 1, 1)
 
-const tailMaterial = new THREE.MeshStandardMaterial({ color: colors.red })
-const tail2Material = new THREE.MeshStandardMaterial({ color: colors.yellow })
-const tail3Material = new THREE.MeshStandardMaterial({ color: colors.green })
-const tail4Material = new THREE.MeshStandardMaterial({ color: colors.blue })
+const tailMaterial = new THREE.MeshStandardMaterial({ color: color.RED })
+const tail2Material = new THREE.MeshStandardMaterial({ color: color.YELLOW })
+const tail3Material = new THREE.MeshStandardMaterial({ color: color.GREEN })
+const tail4Material = new THREE.MeshStandardMaterial({ color: color.BLUE })
 
 const tailMaterials = [
     tailMaterial,
@@ -26,11 +26,11 @@ const Head = forwardRef(({ position = [0, 0, 0] }, ref) => {
         <group ref={ref} position={position}>
             <mesh>
                 <boxGeometry />
-                <meshStandardMaterial color={colors.bright} />
+                <meshStandardMaterial color={color.BRIGHT} />
             </mesh>
             <mesh position-y={1}>
                 <coneGeometry args={[0.5, 1, 4]} />
-                <meshStandardMaterial color={colors.bright} />
+                <meshStandardMaterial color={color.BRIGHT} />
             </mesh>
         </group>
     )
