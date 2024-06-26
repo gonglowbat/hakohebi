@@ -1,10 +1,10 @@
-import * as THREE from 'three'
 import { create } from 'zustand'
-import { subscribeWithSelector } from 'zustand/middleware'
+import { devtools, subscribeWithSelector } from 'zustand/middleware'
 import { configs } from '../enums/configs'
 import { phase } from '../enums/phase'
 
-const useGame = create(subscribeWithSelector((set) => ({
+// const useGame = create(subscribeWithSelector((set) => ({
+const useGame = create(devtools(subscribeWithSelector((set) => ({
     direction: configs.direction,
     setDirection: (direction) => set({ direction }),
 
@@ -29,16 +29,24 @@ const useGame = create(subscribeWithSelector((set) => ({
     isBoozeInUse: false,
     setIsBoozeInUse: (isBoozeInUse) => set({ isBoozeInUse }),
 
-    tails: [new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 0, 2)],
+    tails: configs.defaultTails,
     setTails: (tail) => set((state) => ({ tails: [...state.tails, tail] })),
+    resetTails: () => set(() => ({ tails: configs.defaultTails })),
 
     isDebug: window.location.hash === '#debug',
     setIsDebug: (isDebug) => set(() => ({ isDebug })),
 
     phase: phase.ready,
     start: () => set((state) => {
-        if ([phase.ready, phase.pause, phase.ended].includes(state.phase)) {
+        if (state.phase === phase.ready || state.phase === phase.restarting) {
             return { phase: phase.playing }
+        }
+
+        return {}
+    }),
+    restart: () => set((state) => {
+        if (state.phase === phase.ended) {
+            return { phase: phase.restarting }
         }
 
         return {}
@@ -64,6 +72,7 @@ const useGame = create(subscribeWithSelector((set) => ({
 
         return {}
     }),
-})))
+}))))
+// })))
 
 export default useGame

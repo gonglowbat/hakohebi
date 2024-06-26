@@ -59,11 +59,13 @@ const Snake = forwardRef((props, ref) => {
     const setDirection = useGame((state) => state.setDirection)
     const speed = useGame((state) => state.speed)
     const tails = useGame((state) => state.tails)
+    const resetTails = useGame((state) => state.resetTails)
 
     const phase = useGame((state) => state.phase)
     const pause = useGame((state) => state.pause)
     const resume = useGame((state) => state.resume)
     const end = useGame((state) => state.end)
+    const start = useGame((state) => state.start)
 
     useFrame((state) => {
         const { clock } = state
@@ -98,24 +100,28 @@ const Snake = forwardRef((props, ref) => {
 
             passThroughWall()
 
-            const newTailsPosition = tailsRef.current.map((tail) => ({
-                x: tail.position.x,
-                z: tail.position.z,
-            }))
+            const newTailsPosition = tailsRef.current
+                .filter((tail) => tail !== null)
+                .map((tail) => ({
+                    x: tail.position.x,
+                    z: tail.position.z,
+                }))
 
             tailsRef.current[0].position.x = headPosition.x
             tailsRef.current[0].position.z = headPosition.z
             tails[0].x = headPosition.x
             tails[0].z = headPosition.z
 
-            tailsRef.current.forEach((tail, index) => {
-                if (index > 0) {
-                    tail.position.x = newTailsPosition[index - 1].x
-                    tail.position.z = newTailsPosition[index - 1].z
-                    tails[index].x = newTailsPosition[index - 1].x
-                    tails[index].z = newTailsPosition[index - 1].z
-                }
-            })
+            tailsRef.current
+                .filter((tail) => tail !== null)
+                .forEach((tail, index) => {
+                    if (index > 0) {
+                        tail.position.x = newTailsPosition[index - 1].x
+                        tail.position.z = newTailsPosition[index - 1].z
+                        tails[index].x = newTailsPosition[index - 1].x
+                        tails[index].z = newTailsPosition[index - 1].z
+                    }
+                })
 
             if (isSnakeHitItself()) {
                 end()
@@ -149,7 +155,7 @@ const Snake = forwardRef((props, ref) => {
         const headPositionX = Math.floor(headRef.current.position.x)
         const headPositionZ = Math.floor(headRef.current.position.z)
 
-        return tailsRef.current.some((tail) => {
+        return tailsRef.current.filter((tail) => tail !== null).some((tail) => {
             return Math.floor(tail.position.x) === headPositionX
                 && Math.floor(tail.position.z) === headPositionZ
         })
@@ -174,7 +180,7 @@ const Snake = forwardRef((props, ref) => {
             (state) => state.pause,
             (value) => {
                 if (value) {
-                    return phase === 'playing' ? pause() : resume()
+                    return phase === phaseEnum.playing ? pause() : resume()
                 }
             }
         )
@@ -185,6 +191,25 @@ const Snake = forwardRef((props, ref) => {
             unsubscribeLeft()
             unsubscribeRight()
             unsubscribePause()
+        }
+    })
+
+    useEffect(() => {
+        const unsubscribeRestart = useGame.subscribe((
+            state) => state.phase,
+            (value) => {
+                if (value === phaseEnum.restarting) {
+                    headRef.current.position.set(0, 0, 0)
+                    resetTails()
+                    tailsRef.current = []
+                    setDirection('up')
+                    start()
+                }
+            }
+        )
+
+        return () =>  {
+            unsubscribeRestart()
         }
     })
 

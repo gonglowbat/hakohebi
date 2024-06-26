@@ -1,12 +1,10 @@
-import { useEffect } from 'react'
-import { addEffect } from '@react-three/fiber'
-import { useKeyboardControls } from '@react-three/drei'
 import { phase as phaseEnum } from '../enums/phase'
 import useGame from '../stores/useGame'
 
 const Interface = () => {
     const phase = useGame((state) => state.phase)
     const start = useGame((state) => state.start)
+    const restart = useGame((state) => state.restart)
 
     return (
         <div className="interface">
@@ -20,7 +18,7 @@ const Interface = () => {
 
             {phase === phaseEnum.ended && (
                 <>
-                    <div className="info" onClick={ start }>
+                    <div className="info" onClick={ restart }>
                         <p className="title">Oops!</p>
                         <p className="subtitle">Click to restart</p>
                     </div>

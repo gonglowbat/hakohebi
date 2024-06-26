@@ -3,4 +3,5 @@ export const phase = {
     playing: 'playing',
     pause: 'pause',
     ended: 'ended',
+    restarting: 'restarting',
 }
