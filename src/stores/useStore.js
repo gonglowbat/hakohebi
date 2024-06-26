@@ -31,6 +31,9 @@ const useStore = create(devtools(subscribeWithSelector((set) => ({
     isBoozeInUse: false,
     setIsBoozeInUse: (isBoozeInUse) => set({ isBoozeInUse }),
 
+    boozeTimer: 0,
+    setBoozeTimer: (boozeTimer) => set({ boozeTimer }),
+
     tails: config.defaultTails,
     setTails: (tail) => set((state) => ({ tails: [...state.tails, tail] })),
     resetTails: () => set(() => ({ tails: config.defaultTails })),

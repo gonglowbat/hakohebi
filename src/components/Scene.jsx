@@ -34,7 +34,12 @@ const Scene = () => {
 
     const isBoozeUsable = useStore((state) => state.isBoozeUsable)
     const setIsBoozeUsable = useStore((state) => state.setIsBoozeUsable)
+
+    const isBoozeInUse = useStore((state) => state.isBoozeInUse)
     const setIsBoozeInUse = useStore((state) => state.setIsBoozeInUse)
+
+    const boozeTimer = useStore((state) => state.boozeTimer)
+    const setBoozeTimer = useStore((state) => state.setBoozeTimer)
 
     const setTails = useStore((state) => state.setTails)
     const tails = useStore((state) => state.tails)
@@ -52,11 +57,22 @@ const Scene = () => {
             setIsBoosterInUse(false)
             setSpeed(config.normalSpeed)
         }
-    }, [boosterTimer])
+
+        if (boozeTimer <= 0) {
+            setIsBoozeInUse(false)
+            setCameraPosition(config.camera.normalPosition)
+            camera.position.set(...config.camera.normalPosition)
+            camera.lookAt(0, 0, 0)
+        }
+    }, [boosterTimer, boozeTimer])
 
     useFrame((state, delta) => {
         if (isBoosterInUse && boosterTimer > 0) {
             setBoosterTimer(Math.max(boosterTimer - delta, 0))
+        }
+
+        if (isBoozeInUse && boozeTimer > 0) {
+            setBoozeTimer(Math.max(boozeTimer - delta, 0))
         }
 
         const isSamePositionAsFoodX = Math.floor(snakeRef.current.children[0].position.x) === Math.floor(foodRef.current.position.x)
@@ -97,16 +113,9 @@ const Scene = () => {
 
             setIsBoozeUsable(false)
             setIsBoozeInUse(true)
+            setBoozeTimer(boozeTimer + 3)
             boozeRef.current.position.set(100, 100, 100)
             randomItems()
-
-            const boozeTimeout = setTimeout(() => {
-                setIsBoozeInUse(false)
-                setCameraPosition(config.camera.normalPosition)
-                camera.position.set(...config.camera.normalPosition)
-                camera.lookAt(0, 0, 0)
-                clearTimeout(boozeTimeout)
-            }, 3000)
 
             return
         }
