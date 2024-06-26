@@ -1,5 +1,5 @@
-import { useFrame } from '@react-three/fiber'
 import { forwardRef } from 'react'
+import { useFrame } from '@react-three/fiber'
 import { colors } from '../enums/colors'
 
 const Booster = forwardRef(({ position = [0, 0, 0] }, ref) => {

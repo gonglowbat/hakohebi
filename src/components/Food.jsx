@@ -1,5 +1,6 @@
-import { useFrame } from '@react-three/fiber'
 import { forwardRef } from 'react'
+import { useFrame } from '@react-three/fiber'
+import { colors } from '../enums/colors'
 
 const Food = forwardRef(({ position = [0, 0, 0] }, ref) => {
     useFrame((state, delta) => {
@@ -9,7 +10,7 @@ const Food = forwardRef(({ position = [0, 0, 0] }, ref) => {
     return (
         <mesh ref={ref} position={position}>
             <octahedronGeometry args={[0.5]} />
-            <meshStandardMaterial />
+            <meshStandardMaterial color={colors.bright} />
         </mesh>
     )
 })
