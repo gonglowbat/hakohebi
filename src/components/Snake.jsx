@@ -2,7 +2,6 @@ import * as THREE from 'three'
 import { forwardRef, useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
-import { useControls } from 'leva'
 import { colors } from '../enums/colors'
 import useGame from '../stores/useGame'
 import { configs } from '../enums/configs'
@@ -60,14 +59,14 @@ const Snake = forwardRef((props, ref) => {
     const speed = useGame((state) => state.speed)
     const tails = useGame((state) => state.tails)
 
-    const { stop } = useControls({
-        stop: false,
-    })
+    const phase = useGame((state) => state.phase)
+    const pause = useGame((state) => state.pause)
+    const resume = useGame((state) => state.resume)
 
     useFrame((state) => {
         const { clock } = state
 
-        if (stop) {
+        if (phase === 'pause') {
             return
         }
 
@@ -155,11 +154,25 @@ const Snake = forwardRef((props, ref) => {
         const unsubscribeLeft = subscribeKey('left')
         const unsubscribeRight = subscribeKey('right')
 
+        const unsubscribePause = subscribeKeys(
+            (state) => state.pause,
+            (value) => {
+                if (value) {
+                    if (phase === 'playing') {
+                        pause()
+                    } else {
+                        resume()
+                    }
+                }
+            }
+        )
+
         return () => {
             unsubscribeUp()
             unsubscribeDown()
             unsubscribeLeft()
             unsubscribeRight()
+            unsubscribePause()
         }
     })
 

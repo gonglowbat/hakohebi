@@ -34,6 +34,22 @@ const useGame = create(subscribeWithSelector((set) => ({
     // isDebug: window.location.hash === '#debug',
     isDebug: true,
     setIsDebug: (isDebug) => set(() => ({ isDebug })),
+
+    phase: 'playing', // ready, playing, pause. ended
+    pause: () => set((state) => {
+        if (state.phase === 'playing') {
+            return { phase: 'pause' }
+        }
+
+        return {}
+    }),
+    resume: () => set((state) => {
+        if (state.phase === 'pause') {
+            return { phase: 'playing' }
+        }
+
+        return {}
+    }),
 })))
 
 export default useGame

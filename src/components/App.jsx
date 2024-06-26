@@ -4,6 +4,7 @@ import { KeyboardControls } from '@react-three/drei'
 import { Leva } from 'leva'
 import Scene from './Scene'
 import useGame from '../stores/useGame'
+import Interface from './Interface'
 
 const App = () => {
     const isDebug = useGame((state) => state.isDebug)
@@ -28,6 +29,7 @@ const App = () => {
                 { name: 'down', keys: ['KeyS'] },
                 { name: 'left', keys: ['KeyA'] },
                 { name: 'right', keys: ['KeyD'] },
+                { name: 'pause', keys: ['Space'] },
             ]}>
                 <Canvas
                     // camera={{
@@ -45,6 +47,7 @@ const App = () => {
                 >
                     <Scene />
                 </Canvas>
+                <Interface />
             </KeyboardControls>
         </>
     )
