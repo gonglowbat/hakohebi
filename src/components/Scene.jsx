@@ -17,8 +17,6 @@ const Scene = () => {
     const boosterRef = useRef()
     const boozeRef = useRef()
 
-    const size = useMemo(() => ({ width: config.width, height: config.height }), [])
-
     const setSpeed = useStore((state) => state.setSpeed)
     const setCameraPosition = useStore((state) => state.setCameraPosition)
 
@@ -27,12 +25,15 @@ const Scene = () => {
 
     const isBoosterUsable = useStore((state) => state.isBoosterUsable)
     const setIsBoosterUsable = useStore((state) => state.setIsBoosterUsable)
+
     const isBoosterInUse = useStore((state) => state.isBoosterInUse)
     const setIsBoosterInUse = useStore((state) => state.setIsBoosterInUse)
 
+    const boosterTimer = useStore((state) => state.boosterTimer)
+    const setBoosterTimer = useStore((state) => state.setBoosterTimer)
+
     const isBoozeUsable = useStore((state) => state.isBoozeUsable)
     const setIsBoozeUsable = useStore((state) => state.setIsBoozeUsable)
-    const isBoozeInUse = useStore((state) => state.isBoozeInUse)
     const setIsBoozeInUse = useStore((state) => state.setIsBoozeInUse)
 
     const setTails = useStore((state) => state.setTails)
@@ -46,7 +47,18 @@ const Scene = () => {
         randomItems()
     }, [])
 
-    useFrame((state) => {
+    useEffect(() => {
+        if (boosterTimer <= 0) {
+            setIsBoosterInUse(false)
+            setSpeed(config.normalSpeed)
+        }
+    }, [boosterTimer])
+
+    useFrame((state, delta) => {
+        if (isBoosterInUse && boosterTimer > 0) {
+            setBoosterTimer(Math.max(boosterTimer - delta, 0))
+        }
+
         const isSamePositionAsFoodX = Math.floor(snakeRef.current.children[0].position.x) === Math.floor(foodRef.current.position.x)
         const isSamePositionAsFoodZ = Math.floor(snakeRef.current.children[0].position.z) === Math.floor(foodRef.current.position.z)
 
@@ -66,17 +78,11 @@ const Scene = () => {
 
         if (isSamePositionAsBoosterX && isSamePositionAsBoosterZ && isBoosterUsable) {
             setSpeed(config.superSpeed)
-
             setIsBoosterUsable(false)
             setIsBoosterInUse(true)
+            setBoosterTimer(boosterTimer + 3)
             boosterRef.current.position.set(100, 100, 100)
             randomItems()
-
-            const boosterTimeout = setTimeout(() => {
-                setIsBoosterInUse(false)
-                setSpeed(config.normalSpeed)
-                clearTimeout(boosterTimeout)
-            }, 3000)
 
             return
         }
@@ -182,7 +188,7 @@ const Scene = () => {
 
             <Level />
 
-            <Snake ref={snakeRef} edge={size} />
+            <Snake ref={snakeRef} />
             <Food ref={foodRef} position={[100, 100, 100]} />
             <Booster ref={boosterRef} position={[100, 100, 100]} />
             <Booze ref={boozeRef} position={[100, 100, 100]} />

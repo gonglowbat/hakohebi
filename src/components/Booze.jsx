@@ -4,12 +4,13 @@ import { color } from '../enums/color'
 
 const Booze = forwardRef(({ position = [0, 0, 0] }, ref) => {
     useFrame((state, delta) => {
+        ref.current.rotation.x += delta * 1.5
         ref.current.rotation.y += delta * 2.5
     })
 
     return (
         <mesh ref={ref} position={position}>
-            <octahedronGeometry args={[0.5]} />
+            <torusKnotGeometry args={[0.3, 0.1]} />
             <meshStandardMaterial color={color.RED} />
         </mesh>
     )

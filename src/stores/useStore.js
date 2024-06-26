@@ -22,6 +22,9 @@ const useStore = create(devtools(subscribeWithSelector((set) => ({
     isBoosterInUse: false,
     setIsBoosterInUse: (isBoosterInUse) => set({ isBoosterInUse }),
 
+    boosterTimer: 0,
+    setBoosterTimer: (boosterTimer) => set({ boosterTimer }),
+
     isBoozeUsable: false,
     setIsBoozeUsable: (isBoozeUsable) => set({ isBoozeUsable }),
 
