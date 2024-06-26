@@ -1,16 +1,16 @@
 import { create } from 'zustand'
 import { devtools, subscribeWithSelector } from 'zustand/middleware'
-import { configs } from '../enums/configs'
+import { config } from '../config'
 import { phase } from '../enums/phase'
 
 const useGame = create(devtools(subscribeWithSelector((set) => ({
-    direction: configs.direction,
+    direction: config.direction,
     setDirection: (direction) => set({ direction }),
 
-    speed: configs.normalSpeed,
+    speed: config.normalSpeed,
     setSpeed: (speed) => set({ speed }),
 
-    cameraPosition: configs.camera.normalPosition,
+    cameraPosition: config.camera.normalPosition,
     setCameraPosition: (cameraPosition) => set({ cameraPosition }),
 
     isFoodEdible: true,
@@ -28,9 +28,9 @@ const useGame = create(devtools(subscribeWithSelector((set) => ({
     isBoozeInUse: false,
     setIsBoozeInUse: (isBoozeInUse) => set({ isBoozeInUse }),
 
-    tails: configs.defaultTails,
+    tails: config.defaultTails,
     setTails: (tail) => set((state) => ({ tails: [...state.tails, tail] })),
-    resetTails: () => set(() => ({ tails: configs.defaultTails })),
+    resetTails: () => set(() => ({ tails: config.defaultTails })),
 
     isDebug: window.location.hash === '#debug',
     setIsDebug: (isDebug) => set(() => ({ isDebug })),

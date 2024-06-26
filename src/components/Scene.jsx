@@ -3,7 +3,7 @@ import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei'
 import { useEffect, useMemo, useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import * as array from '../utils/array'
-import { configs } from '../enums/configs'
+import { config } from '../config'
 import Snake from './Snake'
 import Food from './Food'
 import Booster from './Booster'
@@ -17,7 +17,7 @@ const Scene = () => {
     const boosterRef = useRef()
     const boozeRef = useRef()
 
-    const size = useMemo(() => ({ width: configs.width, height: configs.height }), [])
+    const size = useMemo(() => ({ width: config.width, height: config.height }), [])
 
     const setSpeed = useGame((state) => state.setSpeed)
     const setCameraPosition = useGame((state) => state.setCameraPosition)
@@ -65,7 +65,7 @@ const Scene = () => {
         const isSamePositionAsBoosterZ = Math.floor(snakeRef.current.children[0].position.z) === Math.floor(boosterRef.current.position.z)
 
         if (isSamePositionAsBoosterX && isSamePositionAsBoosterZ && isBoosterUsable) {
-            setSpeed(configs.superSpeed)
+            setSpeed(config.superSpeed)
 
             setIsBoosterUsable(false)
             setIsBoosterInUse(true)
@@ -74,7 +74,7 @@ const Scene = () => {
 
             const boosterTimeout = setTimeout(() => {
                 setIsBoosterInUse(false)
-                setSpeed(configs.normalSpeed)
+                setSpeed(config.normalSpeed)
                 clearTimeout(boosterTimeout)
             }, 3000)
 
@@ -85,8 +85,8 @@ const Scene = () => {
         const isSamePositionAsBoozeZ = Math.floor(snakeRef.current.children[0].position.z) === Math.floor(boozeRef.current.position.z)
 
         if (isSamePositionAsBoozeX && isSamePositionAsBoozeZ && isBoozeUsable) {
-            setCameraPosition(configs.camera.invertPosition)
-            camera.position.set(...configs.camera.invertPosition)
+            setCameraPosition(config.camera.invertPosition)
+            camera.position.set(...config.camera.invertPosition)
             camera.lookAt(0, 0, 0)
 
             setIsBoozeUsable(false)
@@ -96,8 +96,8 @@ const Scene = () => {
 
             const boozeTimeout = setTimeout(() => {
                 setIsBoozeInUse(false)
-                setCameraPosition(configs.camera.normalPosition)
-                camera.position.set(...configs.camera.normalPosition)
+                setCameraPosition(config.camera.normalPosition)
+                camera.position.set(...config.camera.normalPosition)
                 camera.lookAt(0, 0, 0)
                 clearTimeout(boozeTimeout)
             }, 3000)
@@ -139,7 +139,7 @@ const Scene = () => {
     const getAvailablePositions = (dimension) => {
         const occupiedPositions = snakeRef.current.children.map((child) => Math.floor(child.position[dimension]))
 
-        return array.unique(occupiedPositions, configs.gridRange[dimension])
+        return array.unique(occupiedPositions, config.gridRange[dimension])
     }
 
     const randomFoodPosition = () => {

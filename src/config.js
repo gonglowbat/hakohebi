@@ -1,10 +1,10 @@
 import * as THREE from 'three'
-import { range } from "../utils/array"
+import { range } from './utils/array'
 
 const width = 24
 const height = 16
 
-export const configs = {
+export const config = {
     width,
     height,
 

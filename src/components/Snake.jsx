@@ -3,7 +3,7 @@ import { forwardRef, useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
 import { color } from '../enums/color'
-import { configs } from '../enums/configs'
+import { config } from '../config'
 import { phase as phaseEnum } from '../enums/phase'
 import useGame from '../stores/useGame'
 
@@ -130,23 +130,23 @@ const Snake = forwardRef((props, ref) => {
     })
 
     const passThroughWall = () => {
-        if (headRef.current.position.x > (configs.width / 2) - 1) {
-            headRef.current.position.x = -configs.width / 2
+        if (headRef.current.position.x > (config.width / 2) - 1) {
+            headRef.current.position.x = -config.width / 2
             return
         }
 
-        if (headRef.current.position.x < (-configs.width / 2)) {
-            headRef.current.position.x = (configs.width / 2) - 1
+        if (headRef.current.position.x < (-config.width / 2)) {
+            headRef.current.position.x = (config.width / 2) - 1
             return
         }
 
-        if (headRef.current.position.z > (configs.height / 2) - 1) {
-            headRef.current.position.z = -configs.height / 2
+        if (headRef.current.position.z > (config.height / 2) - 1) {
+            headRef.current.position.z = -config.height / 2
             return
         }
 
-        if (headRef.current.position.z < (-configs.height / 2)) {
-            headRef.current.position.z = (configs.height / 2) - 1
+        if (headRef.current.position.z < (-config.height / 2)) {
+            headRef.current.position.z = (config.height / 2) - 1
             return
         }
     }

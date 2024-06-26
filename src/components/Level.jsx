@@ -1,12 +1,12 @@
 import { useMemo } from 'react'
 import { Environment, Float, Grid, Text } from '@react-three/drei'
-import { configs } from '../enums/configs'
+import { config } from '../config'
 import useGame from '../stores/useGame'
 
 const Level = () => {
-    const position = useMemo(() => [-0.5, -0.51, -0.5], [])
-    const size = useMemo(() => [configs.width, configs.height], [])
-    const config = useMemo(() => ({
+    const gridPosition = useMemo(() => [-0.5, -0.51, -0.5], [])
+    const gridSize = useMemo(() => [config.width, config.height], [])
+    const gridConfig = useMemo(() => ({
         cellSize: 1,
         cellThickness: 0.6,
         cellColor: '#6f6f6f',
@@ -29,7 +29,7 @@ const Level = () => {
                 <Text
                     font="/fonts/bebas-neue-regular.ttf"
                     textAlign="center"
-                    position={[-0.5, 0.5, (-configs.height / 2) - 2]}
+                    position={[-0.5, 0.5, (-config.height / 2) - 2]}
                     scale={2}
                 >
                     UP
@@ -41,7 +41,7 @@ const Level = () => {
                 <Text
                     font="/fonts/bebas-neue-regular.ttf"
                     textAlign="center"
-                    position={[(-configs.width / 2) - 2, 0.5, 0.5]}
+                    position={[(-config.width / 2) - 2, 0.5, 0.5]}
                     rotation-y={Math.PI / 2}
                     scale={2}
                 >
@@ -50,8 +50,8 @@ const Level = () => {
                 </Text>
             </Float>
 
-            <Grid position={position} args={size} {...config} />
-            <Grid position={position} args={size} {...config} rotation-z={Math.PI} />
+            <Grid position={gridPosition} args={gridSize} {...gridConfig} />
+            <Grid position={gridPosition} args={gridSize} {...gridConfig} rotation-z={Math.PI} />
         </>
     )
 }
