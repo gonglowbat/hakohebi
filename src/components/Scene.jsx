@@ -1,15 +1,15 @@
 import { useFrame, useThree } from '@react-three/fiber'
-import { Environment, GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei'
+import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei'
 import { useEffect, useMemo, useRef } from 'react'
 import { Perf } from 'r3f-perf'
+import * as array from '../utils/array'
 import { configs } from '../enums/configs'
 import Snake from './Snake'
 import Food from './Food'
 import Booster from './Booster'
 import Booze from './Booze'
+import Level from './Level'
 import useGame from '../stores/useGame'
-import * as array from '../utils/array'
-import Grid from './Grid'
 
 const Scene = () => {
     const snakeRef = useRef()
@@ -43,8 +43,6 @@ const Scene = () => {
     const { camera } = useThree()
 
     useEffect(() => {
-        // window.camera = camera
-        // camera.lookAt(0, 0, 0)
         randomItems()
     }, [])
 
@@ -182,8 +180,7 @@ const Scene = () => {
                 </>
             )}
 
-            <Environment preset="city" />
-            <Grid />
+            <Level />
 
             <Snake ref={snakeRef} edge={size} />
             <Food ref={foodRef} position={[100, 100, 100]} />
