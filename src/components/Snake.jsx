@@ -3,8 +3,8 @@ import { forwardRef, useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
 import { colors } from '../enums/colors'
-import useGame from '../stores/useGame'
 import { configs } from '../enums/configs'
+import useGame from '../stores/useGame'
 
 const tailGeometry = new THREE.BoxGeometry(1, 1, 1)
 
@@ -139,30 +139,26 @@ const Snake = forwardRef((props, ref) => {
         }
     }
 
-    const subscribeKey = (goto) => {
+    const subscribeKey = (goto, opposite) => {
         return subscribeKeys(
             (state) => state[goto],
             (value) => {
-                if (value) { setDirection(goto) }
+                if (value && direction !== opposite) { setDirection(goto) }
             }
         )
     }
 
     useEffect(() => {
-        const unsubscribeUp = subscribeKey('up')
-        const unsubscribeDown = subscribeKey('down')
-        const unsubscribeLeft = subscribeKey('left')
-        const unsubscribeRight = subscribeKey('right')
+        const unsubscribeUp = subscribeKey('up', 'down')
+        const unsubscribeDown = subscribeKey('down', 'up')
+        const unsubscribeLeft = subscribeKey('left', 'right')
+        const unsubscribeRight = subscribeKey('right', 'left')
 
         const unsubscribePause = subscribeKeys(
             (state) => state.pause,
             (value) => {
                 if (value) {
-                    if (phase === 'playing') {
-                        pause()
-                    } else {
-                        resume()
-                    }
+                    return phase === 'playing' ? pause() : resume()
                 }
             }
         )
