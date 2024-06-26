@@ -9,7 +9,7 @@ import Food from './Food'
 import Booster from './Booster'
 import Booze from './Booze'
 import Level from './Level'
-import useGame from '../stores/useGame'
+import useStore from '../stores/useStore'
 
 const Scene = () => {
     const snakeRef = useRef()
@@ -19,26 +19,26 @@ const Scene = () => {
 
     const size = useMemo(() => ({ width: config.width, height: config.height }), [])
 
-    const setSpeed = useGame((state) => state.setSpeed)
-    const setCameraPosition = useGame((state) => state.setCameraPosition)
+    const setSpeed = useStore((state) => state.setSpeed)
+    const setCameraPosition = useStore((state) => state.setCameraPosition)
 
-    const isFoodEdible = useGame((state) => state.isFoodEdible)
-    const setIsFoodEdible = useGame((state) => state.setIsFoodEdible)
+    const isFoodEdible = useStore((state) => state.isFoodEdible)
+    const setIsFoodEdible = useStore((state) => state.setIsFoodEdible)
 
-    const isBoosterUsable = useGame((state) => state.isBoosterUsable)
-    const setIsBoosterUsable = useGame((state) => state.setIsBoosterUsable)
-    const isBoosterInUse = useGame((state) => state.isBoosterInUse)
-    const setIsBoosterInUse = useGame((state) => state.setIsBoosterInUse)
+    const isBoosterUsable = useStore((state) => state.isBoosterUsable)
+    const setIsBoosterUsable = useStore((state) => state.setIsBoosterUsable)
+    const isBoosterInUse = useStore((state) => state.isBoosterInUse)
+    const setIsBoosterInUse = useStore((state) => state.setIsBoosterInUse)
 
-    const isBoozeUsable = useGame((state) => state.isBoozeUsable)
-    const setIsBoozeUsable = useGame((state) => state.setIsBoozeUsable)
-    const isBoozeInUse = useGame((state) => state.isBoozeInUse)
-    const setIsBoozeInUse = useGame((state) => state.setIsBoozeInUse)
+    const isBoozeUsable = useStore((state) => state.isBoozeUsable)
+    const setIsBoozeUsable = useStore((state) => state.setIsBoozeUsable)
+    const isBoozeInUse = useStore((state) => state.isBoozeInUse)
+    const setIsBoozeInUse = useStore((state) => state.setIsBoozeInUse)
 
-    const setTails = useGame((state) => state.setTails)
-    const tails = useGame((state) => state.tails)
+    const setTails = useStore((state) => state.setTails)
+    const tails = useStore((state) => state.tails)
 
-    const isDebug = useGame((state) => state.isDebug)
+    const isDebug = useStore((state) => state.isDebug)
 
     const { camera } = useThree()
 

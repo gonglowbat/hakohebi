@@ -5,7 +5,7 @@ import { useKeyboardControls } from '@react-three/drei'
 import { color } from '../enums/color'
 import { config } from '../config'
 import { phase as phaseEnum } from '../enums/phase'
-import useGame from '../stores/useGame'
+import useStore from '../stores/useStore'
 
 const tailGeometry = new THREE.BoxGeometry(1, 1, 1)
 
@@ -55,17 +55,17 @@ const Snake = forwardRef((props, ref) => {
 
     const [subscribeKeys] = useKeyboardControls()
 
-    const direction = useGame((state) => state.direction)
-    const setDirection = useGame((state) => state.setDirection)
-    const speed = useGame((state) => state.speed)
-    const tails = useGame((state) => state.tails)
-    const resetTails = useGame((state) => state.resetTails)
+    const direction = useStore((state) => state.direction)
+    const setDirection = useStore((state) => state.setDirection)
+    const speed = useStore((state) => state.speed)
+    const tails = useStore((state) => state.tails)
+    const resetTails = useStore((state) => state.resetTails)
 
-    const phase = useGame((state) => state.phase)
-    const pause = useGame((state) => state.pause)
-    const resume = useGame((state) => state.resume)
-    const end = useGame((state) => state.end)
-    const start = useGame((state) => state.start)
+    const phase = useStore((state) => state.phase)
+    const pause = useStore((state) => state.pause)
+    const resume = useStore((state) => state.resume)
+    const end = useStore((state) => state.end)
+    const start = useStore((state) => state.start)
 
     useFrame((state) => {
         const { clock } = state
@@ -195,7 +195,7 @@ const Snake = forwardRef((props, ref) => {
     })
 
     useEffect(() => {
-        const unsubscribeRestart = useGame.subscribe((
+        const unsubscribeRestart = useStore.subscribe((
             state) => state.phase,
             (value) => {
                 if (value === phaseEnum.RESTARTING) {

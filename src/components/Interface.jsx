@@ -1,10 +1,10 @@
 import { phase as phaseEnum } from '../enums/phase'
-import useGame from '../stores/useGame'
+import useStore from '../stores/useStore'
 
 const Interface = () => {
-    const phase = useGame((state) => state.phase)
-    const start = useGame((state) => state.start)
-    const restart = useGame((state) => state.restart)
+    const phase = useStore((state) => state.phase)
+    const start = useStore((state) => state.start)
+    const restart = useStore((state) => state.restart)
 
     return (
         <div className="interface">

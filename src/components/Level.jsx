@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Environment, Float, Grid, Text } from '@react-three/drei'
 import { config } from '../config'
-import useGame from '../stores/useGame'
+import useStore from '../stores/useStore'
 
 const Level = () => {
     const gridPosition = useMemo(() => [-0.5, -0.51, -0.5], [])
@@ -19,7 +19,7 @@ const Level = () => {
         infiniteGrid: false,
     }), [])
 
-    const tails = useGame((state) => state.tails)
+    const tails = useStore((state) => state.tails)
 
     return (
         <>

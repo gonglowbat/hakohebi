@@ -3,12 +3,12 @@ import { Canvas } from '@react-three/fiber'
 import { KeyboardControls } from '@react-three/drei'
 import { Leva } from 'leva'
 import Scene from './Scene'
-import useGame from '../stores/useGame'
+import useStore from '../stores/useStore'
 import Interface from './Interface'
 
 const App = () => {
-    const isDebug = useGame((state) => state.isDebug)
-    const setIsDebug = useGame((state) => state.setIsDebug)
+    const isDebug = useStore((state) => state.isDebug)
+    const setIsDebug = useStore((state) => state.setIsDebug)
 
     useEffect(() => {
         window.addEventListener('hashchange', () => {

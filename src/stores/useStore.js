@@ -3,7 +3,7 @@ import { devtools, subscribeWithSelector } from 'zustand/middleware'
 import { config } from '../config'
 import { phase } from '../enums/phase'
 
-const useGame = create(devtools(subscribeWithSelector((set) => ({
+const useStore = create(devtools(subscribeWithSelector((set) => ({
     direction: config.direction,
     setDirection: (direction) => set({ direction }),
 
@@ -73,4 +73,4 @@ const useGame = create(devtools(subscribeWithSelector((set) => ({
     }),
 }))))
 
-export default useGame
+export default useStore
