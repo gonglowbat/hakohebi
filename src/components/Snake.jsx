@@ -4,6 +4,7 @@ import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
 import { colors } from '../enums/colors'
 import { configs } from '../enums/configs'
+import { phase as phaseEnum } from '../enums/phase'
 import useGame from '../stores/useGame'
 
 const tailGeometry = new THREE.BoxGeometry(1, 1, 1)
@@ -62,11 +63,12 @@ const Snake = forwardRef((props, ref) => {
     const phase = useGame((state) => state.phase)
     const pause = useGame((state) => state.pause)
     const resume = useGame((state) => state.resume)
+    const end = useGame((state) => state.end)
 
     useFrame((state) => {
         const { clock } = state
 
-        if (phase === 'pause') {
+        if (phase !== phaseEnum.playing) {
             return
         }
 
@@ -95,6 +97,10 @@ const Snake = forwardRef((props, ref) => {
             }
 
             passThroughWall()
+
+            if (isSnakeHitItself()) {
+                end()
+            }
 
             const newTailsPosition = tailsRef.current.map((tail) => ({
                 x: tail.position.x,
@@ -137,6 +143,16 @@ const Snake = forwardRef((props, ref) => {
             headRef.current.position.z = (configs.height / 2) - 1
             return
         }
+    }
+
+    const isSnakeHitItself = () => {
+        const occupiedPositionsX = tailsRef.current.map((tail) => Math.floor(tail.position.x))
+        const headPositionX = Math.floor(headRef.current.position.x)
+
+        const occupiedPositionsZ = tailsRef.current.map((tail) => Math.floor(tail.position.z))
+        const headPositionZ = Math.floor(headRef.current.position.z)
+
+        return occupiedPositionsX.includes(headPositionX) && occupiedPositionsZ.includes(headPositionZ)
     }
 
     const subscribeKey = (goto, opposite) => {

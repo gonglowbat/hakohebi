@@ -25,6 +25,33 @@ body,
     color: #ffffff;
 }
 
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 40%;
+    left: 0;
+    width: 100%;
+    color: #ffffff;
+    font-size: 80px;
+    background-color: #00000033;
+    padding-top: 10px;
+    pointer-events: auto;
+    cursor: pointer;
+    padding-top: 10px;
+    padding-bottom: 20px;
+
+    & p {
+        margin: 0;
+    }
+
+    & .subtitle {
+        font-size: 40px;
+    }
+}
+
 .controls {
     position: absolute;
     bottom: 20px;

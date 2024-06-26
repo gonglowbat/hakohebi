@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { create } from 'zustand'
 import { subscribeWithSelector } from 'zustand/middleware'
 import { configs } from '../enums/configs'
+import { phase } from '../enums/phase'
 
 const useGame = create(subscribeWithSelector((set) => ({
     direction: configs.direction,
@@ -34,17 +35,31 @@ const useGame = create(subscribeWithSelector((set) => ({
     isDebug: window.location.hash === '#debug',
     setIsDebug: (isDebug) => set(() => ({ isDebug })),
 
-    phase: 'playing', // ready, playing, pause. ended
+    phase: phase.ready,
+    start: () => set((state) => {
+        if ([phase.ready, phase.pause, phase.ended].includes(state.phase)) {
+            return { phase: phase.playing }
+        }
+
+        return {}
+    }),
     pause: () => set((state) => {
-        if (state.phase === 'playing') {
-            return { phase: 'pause' }
+        if (state.phase === phase.playing) {
+            return { phase: phase.pause }
         }
 
         return {}
     }),
     resume: () => set((state) => {
-        if (state.phase === 'pause') {
-            return { phase: 'playing' }
+        if (state.phase === phase.pause) {
+            return { phase: phase.playing }
+        }
+
+        return {}
+    }),
+    end: () => set((state) => {
+        if (state.phase === phase.playing) {
+            return { phase: phase.ended }
         }
 
         return {}

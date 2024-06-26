@@ -1,13 +1,32 @@
 import { useEffect } from 'react'
 import { addEffect } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
+import { phase as phaseEnum } from '../enums/phase'
 import useGame from '../stores/useGame'
 
 const Interface = () => {
     const phase = useGame((state) => state.phase)
+    const start = useGame((state) => state.start)
 
     return (
         <div className="interface">
+            {phase === phaseEnum.ready && (
+                <>
+                    <div className="info" onClick={ start }>
+                        <p className="title">Start!</p>
+                    </div>
+                </>
+            )}
+
+            {phase === phaseEnum.ended && (
+                <>
+                    <div className="info" onClick={ start }>
+                        <p className="title">Oops!</p>
+                        <p className="subtitle">Click to restart</p>
+                    </div>
+                </>
+            )}
+
             <div className="controls">
                 <div className="row">
                     <div className={'button'}>
@@ -32,7 +51,7 @@ const Interface = () => {
                 <div className="row">
                     <div className={'button large'}>
                         <div className={'key'}>Spacebar</div>
-                        <div className={'action'}>{phase === 'playing' ? 'Pause' : 'Resume'}</div>
+                        <div className={'action'}>Pause / Resume</div>
                     </div>
                 </div>
             </div>
