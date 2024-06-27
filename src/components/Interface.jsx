@@ -11,7 +11,7 @@ const Interface = () => {
             {phase === phaseEnum.READY && (
                 <>
                     <div className="info" onClick={ start }>
-                        <p className="title">Start!</p>
+                        <p className="title">Click to Start!</p>
                     </div>
                 </>
             )}
@@ -19,8 +19,16 @@ const Interface = () => {
             {phase === phaseEnum.ENDED && (
                 <>
                     <div className="info" onClick={ restart }>
-                        <p className="title">Oops!</p>
-                        <p className="subtitle">Click to restart</p>
+                        <p className="title">Oops!!</p>
+                        <p className="subtitle">Click to restart!</p>
+                    </div>
+                </>
+            )}
+
+            {phase === phaseEnum.PAUSE && (
+                <>
+                    <div className="info">
+                        <p className="title">PAUSE</p>
                     </div>
                 </>
             )}
