@@ -1,5 +1,6 @@
 import * as THREE from 'three'
-import { forwardRef, useMemo } from 'react'
+import { forwardRef, useMemo, useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
 import useStore from '../stores/useStore'
 import { color } from '../enums/color'
 import { direction } from '../enums/direction'
@@ -50,6 +51,16 @@ const SnakeEye = (() => {
         }
     }, [directionState])
 
+    const leftIrisRef = useRef()
+    const rightIrisRef = useRef()
+
+    useFrame((state) => {
+        const { clock } = state
+
+        leftIrisRef.current.scale.y = Math.cos(clock.getElapsedTime())
+        rightIrisRef.current.scale.y = Math.cos(clock.getElapsedTime())
+    })
+
     return (
         <group position={position} rotation={rotation}>
             <group position={[0.5, 0, 0]}>
@@ -58,6 +69,7 @@ const SnakeEye = (() => {
                     geometry={eyeGeometry}
                 />
                 <mesh
+                    ref={rightIrisRef}
                     position={[0.05, 0, -0.05]}
                     material={irisMaterial}
                     geometry={irisGeometry}
@@ -70,6 +82,7 @@ const SnakeEye = (() => {
                     geometry={eyeGeometry}
                 />
                 <mesh
+                    ref={leftIrisRef}
                     position={[-0.065, 0, -0.05]}
                     material={irisMaterial}
                     geometry={irisGeometry}
