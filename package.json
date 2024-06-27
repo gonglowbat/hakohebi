@@ -3,17 +3,21 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "deploy": "npx vercel"
   },
   "dependencies": {
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.5",
+    "@vercel/analytics": "^1.3.1",
+    "@vercel/speed-insights": "^1.0.12",
     "gsap": "^3.12.5",
     "leva": "^0.9.35",
     "r3f-perf": "^7.2.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "three": "^0.164.1",
+    "vercel": "^34.2.8",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
