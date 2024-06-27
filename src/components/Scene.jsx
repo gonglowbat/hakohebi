@@ -1,6 +1,6 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import * as array from '../utils/array'
 import { config } from '../config'

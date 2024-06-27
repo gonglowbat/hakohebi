@@ -10,11 +10,9 @@ const Level = () => {
     const gridConfig = useMemo(() => ({
         cellSize: 1,
         cellThickness: 0.6,
-        // cellColor: '#6f6f6f',
         cellColor: color.BRIGHT,
         sectionSize: 0,
         sectionThickness: 1,
-        sectionColor: '#9d4b4b',
         fadeDistance: 100,
         fadeStrength: 0,
         followCamera: false,
@@ -27,7 +25,7 @@ const Level = () => {
         <>
             <Environment preset="city" />
 
-            <Float floatIntensity={1} rotationIntensity={0.25} speed={1}>
+            <Float floatIntensity={1} rotationIntensity={0.3} speed={1}>
                 <Text
                     font="/fonts/bebas-neue-regular.ttf"
                     textAlign="center"
@@ -39,7 +37,7 @@ const Level = () => {
                 </Text>
             </Float>
 
-            <Float floatIntensity={1} rotationIntensity={0.25} speed={1}>
+            <Float floatIntensity={1} rotationIntensity={0.3} speed={1}>
                 <Text
                     font="/fonts/bebas-neue-regular.ttf"
                     textAlign="center"

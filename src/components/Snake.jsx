@@ -7,6 +7,8 @@ import useStore from '../stores/useStore'
 import SnakeHead from './SnakeHead'
 import SnakeTail from './SnakeTail'
 
+let timer = 0
+
 const Snake = forwardRef((props, ref) => {
     const headRef = useRef()
     const tailsRef = useRef([])
@@ -25,16 +27,14 @@ const Snake = forwardRef((props, ref) => {
     const end = useStore((state) => state.end)
     const start = useStore((state) => state.start)
 
-    useFrame((state) => {
-        const { clock } = state
-
+    useFrame((state, delta) => {
         if (phase !== phaseEnum.PLAYING) {
             return
         }
 
-        if (clock.getElapsedTime() > 1 / speed) {
-            clock.start()
+        timer += delta
 
+        if (timer > 1 / speed) {
             const headPosition = {
                 x: headRef.current.position.x,
                 z: headRef.current.position.z,
@@ -84,6 +84,8 @@ const Snake = forwardRef((props, ref) => {
             if (isSnakeHitItself()) {
                 end()
             }
+
+            timer = 0
         }
     })
 

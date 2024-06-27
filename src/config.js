@@ -21,6 +21,7 @@ export const config = {
     camera: {
         normalPosition: [10, 26, 27],
         invertPosition: [10, -26, 27],
+        fov: 25,
     },
 
     defaultTails: [

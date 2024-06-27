@@ -11,7 +11,7 @@ const irisMaterial = new THREE.MeshStandardMaterial({ color: color.DARK })
 const eyeGeometry = new THREE.BoxGeometry(0.1, 0.3, 0.3)
 const irisGeometry = new THREE.BoxGeometry(0.1, 0.1, 0.1)
 
-const Eye = (() => {
+const SnakeEye = (() => {
     const directionState = useStore((state) => state.direction)
 
     const position = useMemo(() => {
@@ -89,7 +89,7 @@ const SnakeHead = forwardRef(({ position = [0, 0, 0] }, ref) => {
                 <coneGeometry args={[0.5, 1, 4]} />
             </mesh>
 
-            <Eye />
+            <SnakeEye />
         </group>
     )
 })

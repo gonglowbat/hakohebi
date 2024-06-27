@@ -42,7 +42,7 @@ const App = () => {
                 <Canvas
                     camera={{
                         position: config.camera.normalPosition,
-                        fov: 25,
+                        fov: config.camera.fov,
                     }}
                 >
                     <Scene />
