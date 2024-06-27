@@ -1,15 +1,18 @@
 import { useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { KeyboardControls } from '@react-three/drei'
+import { KeyboardControls, useProgress } from '@react-three/drei'
 import { Leva } from 'leva'
 import Scene from './Scene'
 import useStore from '../stores/useStore'
 import Interface from './Interface'
 import { config } from '../config'
+import Loader from './Loader'
 
 const App = () => {
     const isDebug = useStore((state) => state.isDebug)
     const setIsDebug = useStore((state) => state.setIsDebug)
+
+    const { progress } = useProgress()
 
     useEffect(() => {
         window.addEventListener('hashchange', () => {
@@ -23,6 +26,8 @@ const App = () => {
 
     return (
         <>
+            { progress !== 100 ? <Loader /> : null }
+
             <Leva collapsed={false} hidden={!isDebug}/>
 
             <KeyboardControls map={[
