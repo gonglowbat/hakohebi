@@ -1,53 +1,11 @@
-import * as THREE from 'three'
 import { forwardRef, useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
-import { color } from '../enums/color'
 import { config } from '../config'
 import { phase as phaseEnum } from '../enums/phase'
 import useStore from '../stores/useStore'
-
-const tailGeometry = new THREE.BoxGeometry(1, 1, 1)
-
-const tailMaterial = new THREE.MeshStandardMaterial({ color: color.RED })
-const tail2Material = new THREE.MeshStandardMaterial({ color: color.YELLOW })
-const tail3Material = new THREE.MeshStandardMaterial({ color: color.GREEN })
-const tail4Material = new THREE.MeshStandardMaterial({ color: color.BLUE })
-
-const tailMaterials = [
-    tailMaterial,
-    tail2Material,
-    tail3Material,
-    tail4Material,
-]
-
-const Head = forwardRef(({ position = [0, 0, 0] }, ref) => {
-    return (
-        <group ref={ref} position={position}>
-            <mesh>
-                <boxGeometry />
-                <meshStandardMaterial color={color.BRIGHT} />
-            </mesh>
-            <mesh position-y={1}>
-                <coneGeometry args={[0.5, 1, 4]} />
-                <meshStandardMaterial color={color.BRIGHT} />
-            </mesh>
-        </group>
-    )
-})
-
-const Tail = forwardRef(({ position = [0, 0, 0], index = 0 }, ref) => {
-    const material = tailMaterials[index % tailMaterials.length]
-
-    return (
-        <mesh
-            ref={ref}
-            geometry={tailGeometry}
-            material={material}
-            position={position}
-        />
-    )
-})
+import SnakeHead from './SnakeHead'
+import SnakeTail from './SnakeTail'
 
 const Snake = forwardRef((props, ref) => {
     const headRef = useRef()
@@ -215,10 +173,10 @@ const Snake = forwardRef((props, ref) => {
 
     return (
         <group ref={ref}>
-            <Head ref={headRef} position={[0, 0, 0]} />
+            <SnakeHead ref={headRef} position={[0, 0, 0]} />
 
             {tails.map((tailPosition, index) => (
-                <Tail
+                <SnakeTail
                     key={index}
                     ref={(el) => tailsRef.current[index] = el}
                     position={tailPosition}
