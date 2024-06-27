@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { KeyboardControls, useProgress } from '@react-three/drei'
 import { Leva } from 'leva'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import Scene from './Scene'
 import useStore from '../stores/useStore'
 import Interface from './Interface'
@@ -48,6 +50,9 @@ const App = () => {
 
                 <Interface />
             </KeyboardControls>
+
+            <Analytics />
+            <SpeedInsights />
         </>
     )
 }
