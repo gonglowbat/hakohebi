@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { range } from './utils/array'
 
-const width = 24
-const height = 16
+const width = 14
+const height = 10
 
 export const config = {
     width,
@@ -15,12 +15,12 @@ export const config = {
 
     direction: 'up',
 
-    normalSpeed: 10,
-    superSpeed: 20,
+    normalSpeed: 6,
+    superSpeed: 10,
 
     camera: {
-        normalPosition: [13, 33, 36],
-        invertPosition: [12, -37, 32],
+        normalPosition: [10, 26, 27],
+        invertPosition: [10, -26, 27],
     },
 
     defaultTails: [

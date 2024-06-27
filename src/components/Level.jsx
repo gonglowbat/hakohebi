@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { Environment, Float, Grid, Text } from '@react-three/drei'
 import { config } from '../config'
 import useStore from '../stores/useStore'
+import { color } from '../enums/color'
 
 const Level = () => {
     const gridPosition = useMemo(() => [-0.5, -0.51, -0.5], [])
@@ -9,8 +10,9 @@ const Level = () => {
     const gridConfig = useMemo(() => ({
         cellSize: 1,
         cellThickness: 0.6,
-        cellColor: '#6f6f6f',
-        sectionSize: 4,
+        // cellColor: '#6f6f6f',
+        cellColor: color.BRIGHT,
+        sectionSize: 0,
         sectionThickness: 1,
         sectionColor: '#9d4b4b',
         fadeDistance: 100,

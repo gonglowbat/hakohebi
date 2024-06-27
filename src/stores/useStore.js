@@ -13,7 +13,7 @@ const useStore = create(devtools(subscribeWithSelector((set) => ({
     cameraPosition: config.camera.normalPosition,
     setCameraPosition: (cameraPosition) => set({ cameraPosition }),
 
-    isFoodEdible: true,
+    isFoodEdible: false,
     setIsFoodEdible: (isFoodEdible) => set({ isFoodEdible }),
 
     isBoosterUsable: false,

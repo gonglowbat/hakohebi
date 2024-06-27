@@ -5,6 +5,7 @@ import { Leva } from 'leva'
 import Scene from './Scene'
 import useStore from '../stores/useStore'
 import Interface from './Interface'
+import { config } from '../config'
 
 const App = () => {
     const isDebug = useStore((state) => state.isDebug)
@@ -33,12 +34,13 @@ const App = () => {
             ]}>
                 <Canvas
                     camera={{
-                        position: [13, 33, 36],
+                        position: config.camera.normalPosition,
                         fov: 25,
                     }}
                 >
                     <Scene />
                 </Canvas>
+
                 <Interface />
             </KeyboardControls>
         </>

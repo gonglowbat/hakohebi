@@ -10,6 +10,7 @@ import Booster from './Booster'
 import Booze from './Booze'
 import Level from './Level'
 import useStore from '../stores/useStore'
+import { phase as phaseEnum } from '../enums/phase'
 
 const Scene = () => {
     const snakeRef = useRef()
@@ -46,11 +47,31 @@ const Scene = () => {
 
     const isDebug = useStore((state) => state.isDebug)
 
+    const phase = useStore((state) => state.phase)
+
     const { camera } = useThree()
 
     useEffect(() => {
         randomItems()
     }, [])
+
+    useEffect(() => {
+        const unsubscribeRestart = useStore.subscribe((
+            state) => state.phase,
+            (value) => {
+                if (value === phaseEnum.RESTARTING) {
+                    foodRef.current.position.set(100, 100, 100)
+                    boosterRef.current.position.set(100, 100, 100)
+                    boozeRef.current.position.set(100, 100, 100)
+                    randomItems()
+                }
+            }
+        )
+
+        return () =>  {
+            unsubscribeRestart()
+        }
+    })
 
     useEffect(() => {
         if (boosterTimer <= 0) {
@@ -67,6 +88,10 @@ const Scene = () => {
     }, [boosterTimer, boozeTimer])
 
     useFrame((state, delta) => {
+        if (phase !== phaseEnum.PLAYING) {
+            return
+        }
+
         if (isBoosterInUse && boosterTimer > 0) {
             setBoosterTimer(Math.max(boosterTimer - delta, 0))
         }
