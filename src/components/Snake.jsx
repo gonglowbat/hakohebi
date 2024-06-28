@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { useKeyboardControls } from '@react-three/drei'
 import { config } from '../config'
 import { phase as phaseEnum } from '../enums/phase'
+import { direction as directionEnum } from '../enums/direction'
 import useStore from '../stores/useStore'
 import SnakeHead from './SnakeHead'
 import SnakeTail from './SnakeTail'
@@ -17,7 +18,12 @@ const Snake = forwardRef((props, ref) => {
 
     const direction = useStore((state) => state.direction)
     const setDirection = useStore((state) => state.setDirection)
+
+    const currentDirection = useStore((state) => state.currentDirection)
+    const setCurrentDirection = useStore((state) => state.setCurrentDirection)
+
     const speed = useStore((state) => state.speed)
+
     const tails = useStore((state) => state.tails)
     const resetTails = useStore((state) => state.resetTails)
 
@@ -35,24 +41,26 @@ const Snake = forwardRef((props, ref) => {
         timer += delta
 
         if (timer > 1 / speed) {
+            setCurrentDirection(direction)
+
             const headPosition = {
                 x: headRef.current.position.x,
                 z: headRef.current.position.z,
             }
 
-            if (direction === 'up') {
+            if (direction === directionEnum.UP) {
                 headRef.current.position.z -= 1
             }
 
-            if (direction === 'down') {
+            if (direction === directionEnum.DOWN) {
                 headRef.current.position.z += 1
             }
 
-            if (direction === 'left') {
+            if (direction === directionEnum.LEFT) {
                 headRef.current.position.x -= 1
             }
 
-            if (direction === 'right') {
+            if (direction === directionEnum.RIGHT) {
                 headRef.current.position.x += 1
             }
 
@@ -127,6 +135,7 @@ const Snake = forwardRef((props, ref) => {
             (value) => {
                 if (value
                     && direction !== opposite
+                    && direction === currentDirection
                     && phase === phaseEnum.PLAYING
                 ) {
                     setDirection(goto)
@@ -136,10 +145,10 @@ const Snake = forwardRef((props, ref) => {
     }
 
     useEffect(() => {
-        const unsubscribeUp = subscribeKey('up', 'down')
-        const unsubscribeDown = subscribeKey('down', 'up')
-        const unsubscribeLeft = subscribeKey('left', 'right')
-        const unsubscribeRight = subscribeKey('right', 'left')
+        const unsubscribeUp = subscribeKey(directionEnum.UP, directionEnum.DOWN)
+        const unsubscribeDown = subscribeKey(directionEnum.DOWN, directionEnum.UP)
+        const unsubscribeLeft = subscribeKey(directionEnum.LEFT, directionEnum.RIGHT)
+        const unsubscribeRight = subscribeKey(directionEnum.RIGHT, directionEnum.LEFT)
 
         const unsubscribePause = subscribeKeys(
             (state) => state.pause,
@@ -167,7 +176,7 @@ const Snake = forwardRef((props, ref) => {
                     headRef.current.position.set(0, 0, 0)
                     resetTails()
                     tailsRef.current = []
-                    setDirection('up')
+                    setDirection(directionEnum.UP)
                     start()
                 }
             }

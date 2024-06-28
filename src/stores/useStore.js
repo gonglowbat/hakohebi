@@ -7,6 +7,9 @@ const useStore = create(devtools(subscribeWithSelector((set) => ({
     direction: config.direction,
     setDirection: (direction) => set({ direction }),
 
+    currentDirection: config.direction,
+    setCurrentDirection: (currentDirection) => set({ currentDirection }),
+
     speed: config.normalSpeed,
     setSpeed: (speed) => set({ speed }),
 
