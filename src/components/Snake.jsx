@@ -125,7 +125,12 @@ const Snake = forwardRef((props, ref) => {
         return subscribeKeys(
             (state) => state[goto],
             (value) => {
-                if (value && direction !== opposite) { setDirection(goto) }
+                if (value
+                    && direction !== opposite
+                    && phase === phaseEnum.PLAYING
+                ) {
+                    setDirection(goto)
+                }
             }
         )
     }
