@@ -149,43 +149,34 @@ const Scene = () => {
     const randomItems = () => {
         const random = Math.random()
 
+        const occupiedPositions = snakeRef.current.children.map((child) => child.position)
+        const availablePositionsX = array.unique(occupiedPositions.map((position) => position.x), config.gridRange.x)
+        const availablePositionsZ = array.unique(occupiedPositions.map((position) => position.z), config.gridRange.z)
+        const randomX = array.random(availablePositionsX)
+        const randomZ = array.random(availablePositionsZ)
+
         if (random <= 0.1) {
-            return randomBoozePosition()
+            return randomBoozePosition(randomX, randomZ)
         }
 
         if (random <= 0.7) {
-            return randomFoodPosition()
+            return randomFoodPosition(randomX, randomZ)
         }
 
-        return randomBoosterPosition()
+        return randomBoosterPosition(randomX, randomZ)
     }
 
-    const getAvailablePositions = (dimension) => {
-        const occupiedPositions = snakeRef.current.children.map((child) => Math.floor(child.position[dimension]))
-
-        return array.unique(occupiedPositions, config.gridRange[dimension])
-    }
-
-    const randomFoodPosition = () => {
-        const x = array.random(getAvailablePositions('x'))
-        const z = array.random(getAvailablePositions('z'))
-
+    const randomFoodPosition = (x, z) => {
         foodRef.current.position.set(x, 0, z)
         setIsFoodEdible(true)
     }
 
-    const randomBoosterPosition = () => {
-        const x = array.random(getAvailablePositions('x'))
-        const z = array.random(getAvailablePositions('z'))
-
+    const randomBoosterPosition = (x, z) => {
         boosterRef.current.position.set(x, 0, z)
         setIsBoosterUsable(true)
     }
 
-    const randomBoozePosition = () => {
-        const x = array.random(getAvailablePositions('x'))
-        const z = array.random(getAvailablePositions('z'))
-
+    const randomBoozePosition = (x, z) => {
         boozeRef.current.position.set(x, 0, z)
         setIsBoozeUsable(true)
     }
