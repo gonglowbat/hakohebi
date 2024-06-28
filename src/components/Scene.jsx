@@ -147,22 +147,6 @@ const Scene = () => {
     })
 
     const randomItems = () => {
-        if (useStore.getState().isBoosterInUse) {
-            if (Math.random() >= 0.1) {
-                return randomFoodPosition()
-            } else {
-                return randomBoozePosition()
-            }
-        }
-
-        if (useStore.getState().isBoozeInUse) {
-            if (Math.random() >= 0.3) {
-                return randomFoodPosition()
-            } else {
-                return randomBoosterPosition()
-            }
-        }
-
         const random = Math.random()
 
         if (random <= 0.1) {

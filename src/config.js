@@ -16,7 +16,7 @@ export const config = {
     direction: 'up',
 
     normalSpeed: 6,
-    superSpeed: 10,
+    superSpeed: 11,
 
     camera: {
         normalPosition: [10, 26, 27],
